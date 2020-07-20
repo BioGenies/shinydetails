@@ -33,7 +33,6 @@ generate_tooltip = function(df, hv) {
                        hv[["coords_css"]][["x"]], 
                        hv[["range"]][["right"]]/hv[["img_css_ratio"]][["x"]] - hv[["coords_css"]][["x"]])
       
-      
       style <- paste0("position:absolute; z-index:1000; background-color: rgba(245, 245, 245, 1); pointer-events: none;",
                       tt_pos_adj, ":", tt_pos, 
                       "px; top:", hv[["coords_css"]][["y"]], "px; padding: 0px;")
@@ -62,20 +61,6 @@ generate_tabsetPanel = function(panel, ...) {
   tabPanel(title = paste(panel, "data"), 
            tableOutput_h(paste0(panel, "_data"), ...))))
 }
-
-
-
-generate_plot_tabPanel = function(list_of_panels, ...) {
-  tagList(tabPanel(title = list_of_panels[["title"]],
-                   generate_tabsetPanel(list_of_panels[["tabsetPanel_1"]]),
-                   br(),
-                   generate_tabsetPanel(list_of_panels[["tabsetPanel_2"]]),
-                   br(),
-                   generate_tabsetPanel(list_of_panels[["tabsetPanel_3"]])
-  ))
-}
-
-
 
 
 generate_plot_output = function(id, data, output, input, ...) {
@@ -118,7 +103,6 @@ generate_plot_output = function(id, data, output, input, ...) {
 }
 
 
-
 generate_output = function(panel, data, output, input, ...) {
   
   assign(paste0(panel, "_plot_out"), reactive({
@@ -138,7 +122,6 @@ generate_output = function(panel, data, output, input, ...) {
   output[[paste0(panel, "_data")]] <- renderTable({data})
   output
 }
-
 
 
 ui <- fluidPage(mainPanel(
