@@ -48,15 +48,21 @@ generate_tooltip = function(df, hv) {
 
 generate_tabsetPanel = function(panel, ...) {
   tagList(tabsetPanel(tabPanel(title = paste(panel, "plot"),
-                               plotOutput_h(paste0(panel, "_plot"), hover = paste0(panel, "_hover"), ...),
-                               uiOutput(paste0(panel, "_tooltip")),
-                               downloadButton(paste0(panel, "_download_png"), "Download png"),
-                               downloadButton(paste0(panel, "_download_jpeg"), "Download jpeg"),
-                               downloadButton(paste0(panel, "_download_svg"), "Download svg")),
-                      
-                      tabPanel(title = paste(panel, "data"), 
-                               tableOutput_h(paste0(panel, "_data"), ...))))
+                               br(),
+                               div(style = "position:relative",
+                                   plotOutput_h(paste0(panel, "_plot"),  
+                                                hover = hoverOpts(paste0(panel, "_hover"), 
+                                                                  delay = 10, 
+                                                                  delayType = "debounce"), ...),
+                                   uiOutput(paste0(panel, "_tooltip")),
+                                   downloadButton(paste0(panel, "_download_png"), "Download png"),
+                                   downloadButton(paste0(panel, "_download_jpeg"), "Download jpeg"),
+                                   downloadButton(paste0(panel, "_download_svg"), "Download svg"))
+  ),
+  tabPanel(title = paste(panel, "data"), 
+           tableOutput_h(paste0(panel, "_data"), ...))))
 }
+
 
 
 generate_plot_tabPanel = function(list_of_panels, ...) {
@@ -120,8 +126,15 @@ generate_output = function(panel, data, output, input, ...) {
       geom_point()
   }), envir=.GlobalEnv)
   
-  output = generate_plot_output(panel, data, output, input, ...)
+  if(any(c(paste0(panel, "_plot_out"), 
+           paste0(panel, "_plot"),
+           paste0(panel,"_tooltip"),
+           paste0(panel, "_download_jpeg"),
+           paste0(panel, "_download_png"),
+           paste0(panel, "_download_svg"),
+           paste0(panel, "_data")) %in% names(output))) stop("Names conflict")
   
+  output = generate_plot_output(panel, data, output, input, ...)
   output[[paste0(panel, "_data")]] <- renderTable({data})
   output
 }
