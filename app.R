@@ -63,42 +63,26 @@ generate_tabsetPanel = function(panel, ...) {
 }
 
 
+
+create_downloadButton = function(id, device) {
+  downloadHandler(paste0(id, "_plot.", device),
+                  content = function(file){
+                    ggsave(file, 
+                           eval(parse(text = paste0(id, "_plot_out()"))),
+                           device = device, height = 300, width = 400, 
+                           units = "mm")})
+}
+
+
 generate_plot_output = function(id, data, output, input, ...) {
   
   output[[paste0(id, "_plot")]] <- renderPlot({eval(parse(text = paste0(id, "_plot_out()")))})
   
   output[[paste0(id,"_tooltip")]] <- renderUI({generate_tooltip(data, input[[paste0(id, "_hover")]])})
   
-  output[[paste0(id, "_download_png")]] <- downloadHandler(paste0(id, "_plot.png"),
-                                                           content = function(file){
-                                                             ggsave(file, 
-                                                                    eval(parse(text = paste0(id, "_plot_out()"))),
-                                                                    width = 7, 
-                                                                    height = 4, 
-                                                                    dpi = 300, 
-                                                                    units = "in", 
-                                                                    device='png')
-                                                           })
-  output[[paste0(id, "_download_jpeg")]] <- downloadHandler(paste0(id, "_plot.jpeg"),
-                                                            content = function(file){
-                                                              ggsave(file, 
-                                                                     eval(parse(text = paste0(id, "_plot_out()"))),
-                                                                     width = 7, 
-                                                                     height = 4, 
-                                                                     dpi = 300, 
-                                                                     units = "in", 
-                                                                     device='jpeg')
-                                                            })
-  output[[paste0(id, "_download_svg")]] <- downloadHandler(paste0(id, "_plot.svg"),
-                                                           content = function(file){
-                                                             ggsave(file, 
-                                                                    eval(parse(text = paste0(id, "_plot_out()"))),
-                                                                    width = 7, 
-                                                                    height = 4, 
-                                                                    dpi = 300, 
-                                                                    units = "in", 
-                                                                    device='svg')
-                                                           })
+  output[[paste0(id, "_download_png")]] <- create_downloadButton(id, "png")
+  output[[paste0(id, "_download_jpeg")]] <- create_downloadButton(id, "jpeg")
+  output[[paste0(id, "_download_svg")]] <- create_downloadButton(id, "svg")
   output
 }
 
