@@ -3,6 +3,21 @@ library(shinycssloaders)
 library(shinyhelper)
 library(ggplot2)
 library(svglite)
+library(dplyr)
+library(DT)
+
+
+dt_format <- function(dat, cols = colnames(dat)) {
+  
+  datatable(data = dat,
+            colnames = cols,
+            class = "table-bordered table-condensed",
+            extensions = "Buttons",
+            options = list(pageLength = 10, dom = "tBip", autoWidth = TRUE, buttons = c("excel", "pdf")),
+            filter = "bottom",
+            rownames = FALSE)
+}
+
 
 
 plotOutput_h <- function(outputId, ...) {
@@ -16,7 +31,7 @@ numericInput_h <- function(inputId, ...) {
 
 
 tableOutput_h <- function(inputId, ...) {
-  helper(tableOutput(inputId, ...), content = inputId, type = "markdown")
+  helper(DT::dataTableOutput(inputId, ...), content = inputId, type = "markdown")
 }
 
 
@@ -73,12 +88,9 @@ create_downloadButton = function(id, device) {
 }
 
 
-generate_plot_output = function(id, data, output, input, ...) {
-  
+generate_plot_output = function(id, data, output, input) {
   output[[paste0(id, "_plot")]] <- renderPlot({eval(parse(text = paste0(id, "_plot_out()")))})
-  
   output[[paste0(id,"_tooltip")]] <- renderUI({generate_tooltip(data, input[[paste0(id, "_hover")]])})
-  
   output[[paste0(id, "_download_png")]] <- create_downloadButton(id, "png")
   output[[paste0(id, "_download_jpeg")]] <- create_downloadButton(id, "jpeg")
   output[[paste0(id, "_download_svg")]] <- create_downloadButton(id, "svg")
@@ -86,23 +98,19 @@ generate_plot_output = function(id, data, output, input, ...) {
 }
 
 
-generate_output = function(panel, data, output, input, ...) {
-  
-  assign(paste0(panel, "_plot_out"), reactive({
-    ggplot(data = data, aes(...))+
-      geom_point()
-  }), envir=.GlobalEnv)
-  
-  if(any(c(paste0(panel, "_plot_out"), 
-           paste0(panel, "_plot"),
+generate_output = function(panel, data, output, input) {
+  if(any(c(paste0(panel, "_plot"),
            paste0(panel,"_tooltip"),
            paste0(panel, "_download_jpeg"),
            paste0(panel, "_download_png"),
            paste0(panel, "_download_svg"),
            paste0(panel, "_data")) %in% names(output))) stop("Names conflict")
   
-  output = generate_plot_output(panel, data, output, input, ...)
-  output[[paste0(panel, "_data")]] <- renderTable({data})
+  output = generate_plot_output(panel, data, output, input)
+  
+  output[[paste0(panel, "_data")]] <- DT::renderDataTable(server = FALSE, {
+    eval(parse(text = paste0(panel, "_table_out()")))
+  })
   output
 }
 
@@ -111,7 +119,7 @@ ui <- fluidPage(mainPanel(
   column(width = 3,
          br(),
          numericInput_h("n_input", label = "Numeric input", 
-                        value = 1, min = 1, max = 5)),
+                        value = 1, min = 1, max = 20)),
   column(width = 9,
          tabsetPanel(tabPanel(title = "plots 1",
                               generate_tabsetPanel("orange"),
@@ -119,30 +127,10 @@ ui <- fluidPage(mainPanel(
                               generate_tabsetPanel("mtcars"),
                               br(),
                               generate_tabsetPanel("iris")),
-                     tabPanel(title = "plots 2",
-                              generate_tabsetPanel("CO2"),
-                              br(),
-                              generate_tabsetPanel("rock"),
-                              br(),
-                              generate_tabsetPanel("trees")),
-                     tabPanel(title = "plots 3",
-                              generate_tabsetPanel("airquality"),
-                              br(),
-                              generate_tabsetPanel("sleep"),
-                              br(),
-                              generate_tabsetPanel("attenu")),
-                     tabPanel(title = "plots 4",
-                              generate_tabsetPanel("attitude"),
-                              br(),
-                              generate_tabsetPanel("cars"),
-                              br(),
-                              generate_tabsetPanel("beaver1")),
-                     tabPanel(title = "plots 5",
-                              generate_tabsetPanel("stackloss"),
-                              br(),
-                              generate_tabsetPanel("warpbreaks"),
-                              br(),
-                              generate_tabsetPanel("women")))
+                     tabPanel("plots 2"),
+                     tabPanel("plots 3"),
+                     tabPanel("plots 4"),
+                     tabPanel("plots 5"))
          
   )
 )
@@ -152,25 +140,47 @@ ui <- fluidPage(mainPanel(
 server <- function(input, output) {
   observe_helpers(session = shiny::getDefaultReactiveDomain(), help_dir = "helpfiles")
   
-  output <- generate_output("iris", iris, output, input, x = Sepal.Length, y = Petal.Length, col = Species)
-  output <- generate_output("mtcars", mtcars, output, input, x = mpg, y = disp, col = as.factor(gear))
-  output <- generate_output("orange", Orange, output, input, x = age, y = circumference, col = Tree)
+  # plot 1
+  assign("iris_plot_out", reactive({
+    ggplot(data = iris[1:input[["n_input"]],], aes(x = Sepal.Length, y = Petal.Length, col = Species)) +
+      geom_point()
+  }), envir=.GlobalEnv)
   
-  output <- generate_output("CO2", CO2, output, input, x = conc, y = uptake, col = Plant)
-  output <- generate_output("rock", rock, output, input, y = peri, x = shape, col = as.factor(perm))
-  output <- generate_output("trees", trees, output, input, x = Height , y = Volume)
+  assign("iris_table_out", reactive({
+    iris %>% 
+      dt_format()
+  }), envir=.GlobalEnv)
   
-  output <- generate_output("sleep", sleep, output, input, y = extra  , x = group, col = ID)
-  output <- generate_output("airquality", airquality, output, input, y = Wind, x = Solar.R, col = Month )
-  output <- generate_output("attenu", attenu, output, input, y = dist , x = station  , col = event)
+  output <- generate_output("iris", iris, output, input)
   
-  output <- generate_output("attitude", attitude, output, input, y = rating , x = complaints, col = raises)
-  output <- generate_output("cars", cars, output, input, y = speed, x = dist)
-  output <- generate_output("beaver1", beaver1, output, input, y = temp, x = time, col = as.character(activ))
   
-  output <- generate_output("stackloss", stackloss, output, input, y = Water.Temp , x = Acid.Conc.)
-  output <- generate_output("warpbreaks", warpbreaks , output, input, y = wool , x = breaks, col = tension)
-  output <- generate_output("women", women, output, input, y = height , x = weight)
+  # plot 2
+  
+  assign("mtcars_table_out", reactive({
+    mtcars %>% 
+      dt_format()
+  }), envir=.GlobalEnv)
+  
+  assign("mtcars_plot_out", reactive({
+    ggplot(data = mtcars, aes(x = mpg, y = disp, col = as.factor(gear)))+
+      geom_point()
+  }), envir=.GlobalEnv)
+  output <- generate_output("mtcars", mtcars, output, input)
+  
+  
+  # plot 3
+  
+  assign("orange_table_out", reactive({
+    Orange %>% 
+      dt_format()
+  }), envir=.GlobalEnv)
+  
+  assign("orange_plot_out", reactive({
+    ggplot(data = Orange, aes(x = age, y = circumference, col = Tree))+
+      geom_line() +
+      geom_point()
+  }), envir=.GlobalEnv)
+  output <- generate_output("orange", Orange, output, input)
 }
 
 
