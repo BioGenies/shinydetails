@@ -61,16 +61,6 @@ generate_tooltip = function(df, hv, content = NA) {
 }
 
 
-create_downloadButton = function(id, device) {
-  downloadHandler(paste0(id, "_plot.", device),
-                  content = function(file){
-                    ggsave(file, 
-                           eval(parse(text = paste0(id, "_plot_out()"))),
-                           device = device, height = 300, width = 400, 
-                           units = "mm")})
-}
-
-
 tabsetPanel_UI <- function(id, label = NULL) {
   ns <- NS(id)
   tagList(tabsetPanel(tabPanel(title = paste(id, "plot"),
@@ -90,22 +80,29 @@ tabsetPanel_UI <- function(id, label = NULL) {
 }
 
 
-tabsetPanel_SERVER <- function(id, data, plot, table) {
+generate_downloadButton = function(id, plot_out, device) {
+  downloadHandler(paste0(id, "_plot.", device),
+                  content = function(file){
+                    ggsave(file, plot_out(), device = device, height = 300, 
+                           width = 400, units = "mm")})
+}
+
+
+tabsetPanel_SERVER <- function(id, data, plot_out, table_out) {
   
   moduleServer(id, function(input, output, session) {
     
-    output[["plot"]] <- renderPlot({plot()})
+    output[["plot"]] <- renderPlot({plot_out()})
     output[["tooltip"]] <- renderUI({
-      ns <- session$ns
       generate_tooltip(data(), input[["hover"]])
     })
-    output[["download_png"]] <- create_downloadButton(id, "png")
-    output[["download_jpeg"]] <- create_downloadButton(id, "jpeg")
-    output[["download_svg"]] <- create_downloadButton(id, "svg")
+    output[["download_png"]] <- generate_downloadButton(id, plot_out, "png")
+    output[["download_jpeg"]] <- generate_downloadButton(id, plot_out, "jpeg")
+    output[["download_svg"]] <- generate_downloadButton(id, plot_out, "svg")
     
     
     output[["data"]] <- DT::renderDataTable(server = FALSE, {
-      table() %>% 
+      table_out() %>% 
         dt_format()
     })
     
