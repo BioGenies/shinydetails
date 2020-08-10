@@ -25,37 +25,33 @@ dt_format <- function(dat, cols = colnames(dat)) {
             colnames = cols,
             class = "table-bordered table-condensed",
             extensions = "Buttons",
-            options = list(pageLength = 10, dom = "tBip", autoWidth = TRUE, buttons = c("excel", "pdf")),
+            options = list(pageLength = 10, dom = "tBip", autoWidth = TRUE, buttons = c("excel", "csv")),
             filter = "bottom",
             rownames = FALSE)
 }
 
 
-generate_tooltip = function(df, hv, content = NA) {
-  if(!is.null(hv)) {
-    tt_df <- nearPoints(df = df, coordinfo = hv, maxpoints = 1)
+generate_tooltip = function(hv, tt_df, content = NA) {
+  
+  if(nrow(tt_df) != 0) { 
+    tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
+                         "left", "right")
     
-    if(nrow(tt_df) != 0) { 
-      
-      tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
-                           "left", "right")
-      
-      tt_pos <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
-                       hv[["coords_css"]][["x"]], 
-                       hv[["range"]][["right"]]/hv[["img_css_ratio"]][["x"]] - hv[["coords_css"]][["x"]])
-      
-      style <- paste0("position:absolute; z-index:1000; background-color: rgba(245, 245, 245, 1); pointer-events: none;",
-                      tt_pos_adj, ":", tt_pos, 
-                      "px; top:", hv[["coords_css"]][["y"]], "px; padding: 0px;")
-      if(is.na(content)) {
-        div(style = style,
-            p(HTML(paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))))
-        )
-      }else {
-        div(style = style,
-            p(HTML(content))
-        )
-      }
+    tt_pos <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
+                     hv[["coords_css"]][["x"]], 
+                     hv[["range"]][["right"]]/hv[["img_css_ratio"]][["x"]] - hv[["coords_css"]][["x"]])
+    
+    style <- paste0("position:absolute; z-index:1000; background-color: rgba(245, 245, 245, 1); pointer-events: none;",
+                    tt_pos_adj, ":", tt_pos, 
+                    "px; top:", hv[["coords_css"]][["y"]], "px; padding: 0px;")
+    if(is.na(content)) {
+      div(style = style,
+          p(HTML(paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))))
+      )
+    }else {
+      div(style = style,
+          p(HTML(content))
+      )
     }
   }
 }
@@ -88,18 +84,36 @@ generate_downloadButton = function(id, plot_out, device) {
 }
 
 
-tabsetPanel_SERVER <- function(id, data, plot_out, table_out) {
+tabsetPanel_SERVER <- function(id, data, plot_out, table_out, bar_plot = FALSE) {
   
   moduleServer(id, function(input, output, session) {
-    
     output[["plot"]] <- renderPlot({plot_out()})
+    
     output[["tooltip"]] <- renderUI({
-      generate_tooltip(data(), input[["hover"]])
+      
+      hv = input[["hover"]]
+      plot_data <- plot_out()[["data"]]
+      
+      if(!is.null(hv)) {
+        
+        if(bar_plot) {
+          hv_data = data.frame(x = hv[["x"]],
+                              y = hv[["y"]],
+                              xmin = ggplot_build(plot_out())[["data"]][[1]][["xmin"]],
+                              xmax = ggplot_build(plot_out())[["data"]][[1]][["xmax"]],
+                              plot_data) 
+          tt_df = filter(hv_data, x < xmax & x >= xmin) %>% 
+            select(-x, -y, -xmax, -xmin)
+        }else {
+          tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
+        }
+        generate_tooltip(hv, tt_df)
+      }
     })
+    
     output[["download_png"]] <- generate_downloadButton(id, plot_out, "png")
     output[["download_jpeg"]] <- generate_downloadButton(id, plot_out, "jpeg")
     output[["download_svg"]] <- generate_downloadButton(id, plot_out, "svg")
-    
     
     output[["data"]] <- DT::renderDataTable(server = FALSE, {
       table_out() %>% 

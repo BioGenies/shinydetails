@@ -6,7 +6,7 @@ library(svglite)
 library(dplyr)
 library(DT)
 
-source("mod.R")
+source("mod1.R")
 
 
 
@@ -38,20 +38,26 @@ server <- function(input, output) {
   
   #orange plot 1
   orange1_data <- reactive({
-    Orange 
+    df = data.frame(count = table(cut(Orange[["age"]], 10)))
+    colnames(df) = c("age", "count")
+    df 
   })
   orange1_plot_out <- reactive({
     orange1_data() %>% 
-      ggplot(aes(x = age))+
-      geom_histogram()
+      ggplot(aes(x = age, y = count))+
+      geom_col() +
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))
   })
+  
+  
+  
   
   #orange plot 2
   orange2_data <- reactive({
     Orange 
   })
   orange2_plot_out <- reactive({
-    orange1_data() %>% 
+    orange2_data() %>% 
       ggplot(aes(x = age, y = circumference, col = Tree))+
       ylim(input[["y_lim"]]) +
       xlim(input[["x_lim"]]) +
@@ -63,8 +69,7 @@ server <- function(input, output) {
     Orange 
   })
   orange3_plot_out <- reactive({
-    print(input[["y_lim"]])
-    orange1_data() %>% 
+    orange3_data() %>% 
       ggplot(aes(x = age, y = circumference, col = Tree))+
       ylim(input[["y_lim"]]) +
       xlim(input[["x_lim"]]) +
@@ -74,7 +79,8 @@ server <- function(input, output) {
   tabsetPanel_SERVER(id = "orange1", 
                      data = reactive(Orange), 
                      plot = orange1_plot_out, 
-                     table = orange1_data)
+                     table = orange1_data,
+                     bar_plot = TRUE)
   tabsetPanel_SERVER(id = "orange2", 
                      data = reactive(Orange), 
                      plot = orange2_plot_out, 
