@@ -19,6 +19,13 @@ tableOutput_h <- function(inputId, ...) {
 }
 
 
+#' @title Table widget
+#' @description  \code{dt_format} is a function for creating a graphical widget containing a table with download buttons.
+#' @param data Dataset. A matrix or data frame.
+#' @param cols Names of columns to display.
+#' @details This function uses \link{[DT]{datatable}}.
+#' @export
+#' 
 
 dt_format <- function(dat, cols = colnames(dat)) {
   datatable(data = dat,
@@ -31,7 +38,63 @@ dt_format <- function(dat, cols = colnames(dat)) {
 }
 
 
-generate_tooltip = function(hv, tt_df, content = NA) {
+#' @title Download button
+#' @description  Generates download button.
+#' @param id Id name of tabset panel.
+#' @param plot_out Reactive. Plot to save.
+#' @param device Parameter from \code{\link{[ggplot2]{ggsave}}}.
+#' @return \code{generate_downloadButton} returns output of \code{downloadHandler} for given plot and device.
+#' @details This function uses \link{[shiny]{downloadHandler}}
+#' @export
+
+generate_downloadButton = function(id, plot_out, device) {
+  downloadHandler(paste0(id, "_plot.", device),
+                  content = function(file){
+                    ggsave(file, plot_out(), device = device, height = 300, 
+                           width = 400, units = "mm")})
+}
+
+
+#' @title Tooltip data
+#' @description  Prepares data in order that it may be displayed in tooltip.
+#' @param hv Hoover.
+#' @param plot_out Reactive. Plot to extract data from.
+#' @param plot_type Type of plot. Accepts either \code{'point'} or \code{'bar'}. Default \code{'point'}.
+#' @return \code{prepare_tt_data} returns prepared data frame containing one record.
+#' @details This function filters one row of the imputed data in order that it coresponds the most to the hoover coordinates.
+#' @export
+
+
+prepare_tt_data = function(hv, plot_out, plot_type = "point") {
+  
+  plot_data = plot_out()[["data"]]
+  
+  if(plot_type == "bar") {
+    hv_data = data.frame(x = hv[["x"]],
+                         y = hv[["y"]],
+                         xmin = ggplot_build(plot_out())[["data"]][[1]][["xmin"]],
+                         xmax = ggplot_build(plot_out())[["data"]][[1]][["xmax"]],
+                         plot_data) 
+    tt_df = filter(hv_data, x < xmax & x >= xmin) %>% 
+      select(-x, -y, -xmax, -xmin)
+  }
+  if(plot_type == "point") {
+    tt_df = nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
+  }
+  tt_df
+}
+
+
+#' @title Generate tooltip
+#' @description  Generates tooltip .
+#' @inheritParams prepare_tt_data
+#' @param tt_cols Vector of strings. Names of columns to display in tooltip.
+#' @export
+#' 
+
+generate_tooltip = function(hv, plot_out, plot_type, tt_cols) {
+  
+  tt_df = prepare_tt_data(hv, plot_out, plot_type)
   
   if(nrow(tt_df) != 0) { 
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
@@ -44,18 +107,20 @@ generate_tooltip = function(hv, tt_df, content = NA) {
     style <- paste0("position:absolute; z-index:1000; background-color: rgba(245, 245, 245, 1); pointer-events: none;",
                     tt_pos_adj, ":", tt_pos, 
                     "px; top:", hv[["coords_css"]][["y"]], "px; padding: 0px;")
-    if(is.na(content)) {
-      div(style = style,
-          p(HTML(paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))))
-      )
-    }else {
-      div(style = style,
-          p(HTML(content))
-      )
-    }
+    
+    tt_df = tt_df %>% 
+      select(tt_cols)
+    div(style = style,
+        p(HTML(paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))))
+    )
   }
 }
 
+
+#' @title  UI for tabset panel.
+#' @description  Creates module ui for tabset panel with plot and table.
+#' @param id Id name of tabset panel.
+#' @export
 
 tabsetPanel_UI <- function(id, label = NULL) {
   ns <- NS(id)
@@ -76,38 +141,25 @@ tabsetPanel_UI <- function(id, label = NULL) {
 }
 
 
-generate_downloadButton = function(id, plot_out, device) {
-  downloadHandler(paste0(id, "_plot.", device),
-                  content = function(file){
-                    ggsave(file, plot_out(), device = device, height = 300, 
-                           width = 400, units = "mm")})
-}
+#' @title  Server for tabset panel.
+#' @description  Creates module server for tabset panel with plot and table.
+#' @param id Id name of tabset panel.
+#' @inheritParams generate_tooltip
+#' @export
 
 
-tabsetPanel_SERVER <- function(id, data, plot_out, table_out, bar_plot = FALSE) {
+tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point", 
+                               tt_cols = colnames(table_out())) {
+  
+  if(!(plot_type %in% c("bar", "point"))) stop("plot_type must be either bar or point")
   
   moduleServer(id, function(input, output, session) {
     output[["plot"]] <- renderPlot({plot_out()})
     
     output[["tooltip"]] <- renderUI({
-      
       hv = input[["hover"]]
-      plot_data <- plot_out()[["data"]]
-      
       if(!is.null(hv)) {
-        
-        if(bar_plot) {
-          hv_data = data.frame(x = hv[["x"]],
-                              y = hv[["y"]],
-                              xmin = ggplot_build(plot_out())[["data"]][[1]][["xmin"]],
-                              xmax = ggplot_build(plot_out())[["data"]][[1]][["xmax"]],
-                              plot_data) 
-          tt_df = filter(hv_data, x < xmax & x >= xmin) %>% 
-            select(-x, -y, -xmax, -xmin)
-        }else {
-          tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
-        }
-        generate_tooltip(hv, tt_df)
+        generate_tooltip(hv, plot_out, plot_type, tt_cols)
       }
     })
     
