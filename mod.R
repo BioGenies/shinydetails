@@ -1,5 +1,4 @@
 
-
 plotOutput_h <- function(outputId, ...) {
   helper(plotOutput(outputId, ...), content = outputId, type = "markdown")
 }
@@ -151,7 +150,7 @@ tabsetPanel_UI <- function(id, label = NULL) {
 tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point", 
                                tt_cols = colnames(table_out())) {
   
-  if(!(plot_type %in% c("bar", "point"))) stop("plot_type must be either bar or point")
+  if(!(plot_type %in% c("bar", "point"))) stop("plot_type must be either bar or point.")
   
   moduleServer(id, function(input, output, session) {
     output[["plot"]] <- renderPlot({plot_out()})
@@ -174,4 +173,3 @@ tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point",
     
   })
 }
-
