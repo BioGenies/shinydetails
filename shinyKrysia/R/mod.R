@@ -24,7 +24,7 @@ tableOutput_h <- function(inputId, ...) {
 #' @param cols Names of columns to display.
 #' @details This function uses \link{[DT]{datatable}}.
 #' @export
-#' 
+#'
 
 dt_format <- function(dat, cols = colnames(dat)) {
   datatable(data = dat,
@@ -49,7 +49,7 @@ dt_format <- function(dat, cols = colnames(dat)) {
 generate_downloadButton = function(id, plot_out, device) {
   downloadHandler(paste0(id, "_plot.", device),
                   content = function(file){
-                    ggsave(file, plot_out(), device = device, height = 300, 
+                    ggsave(file, plot_out(), device = device, height = 300,
                            width = 400, units = "mm")})
 }
 
@@ -58,28 +58,59 @@ generate_downloadButton = function(id, plot_out, device) {
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
 #' @param plot_out Reactive. Plot to extract data from.
-#' @param plot_type Type of plot. Accepts either \code{'point'} or \code{'bar'}. Default \code{'point'}.
+#' @param plot_type Type of plot. Accepts either \code{'point'}, \code{'comparison'} or \code{'bar'}. Default \code{'point'}.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
 #' @details This function filters one row of the imputed data in order that it coresponds the most to the hoover coordinates.
 #' @export
 
 
 prepare_tt_data = function(hv, plot_out, plot_type = "point") {
-  
+
   plot_data = plot_out()[["data"]]
-  
-  if(plot_type == "bar") {
-    hv_data = data.frame(x = hv[["x"]],
-                         y = hv[["y"]],
-                         xmin = ggplot_build(plot_out())[["data"]][[1]][["xmin"]],
-                         xmax = ggplot_build(plot_out())[["data"]][[1]][["xmax"]],
-                         plot_data) 
-    tt_df = filter(hv_data, x < xmax & x >= xmin) %>% 
-      select(-x, -y, -xmax, -xmin)
-  }
-  if(plot_type == "point") {
-    tt_df = nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
-  }
+
+  switch(plot_type,
+         bar = {
+           plot_data_info = ggplot_build(plot_out())[["data"]][[1]]
+           hv_data = data.frame(x = hv[["x"]],
+                                y = hv[["y"]],
+                                xmin = plot_data_info[["xmin"]],
+                                xmax = plot_data_info[["xmax"]],
+                                plot_data)
+           tt_df = hv_data[hv_data[["x"]] < hv_data[["xmax"]] & hv_data[["x"]] >= hv_data[["xmin"]],
+                           !(colnames(hv_data) %in% c("x", "y", "xmax", "xmin"))]
+         },
+         point = {
+           tt_df = nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
+         },
+         comparison = {
+           hv_data <- data.frame(x = hv[["x"]],
+                                 y = hv[["y"]],
+                                 Start = plot_data[[hv[["mapping"]][["x"]]]],
+                                 End = plot_data[["End"]],
+                                 y_plot = plot_data[[hv[["mapping"]][["y"]]]],
+                                 Sequence = plot_data[["Sequence"]],
+                                 State = plot_data[["State"]])
+           tt_df = hv_data[hv_data[["x"]] > hv_data[["Start"]] &
+                             hv_data[["x"]] < hv_data[["End"]] &
+                             abs(hv_data[["y_plot"]] - hv_data[["y"]]) < 10 &
+                             abs(hv_data[["y_plot"]] - hv_data[["y"]]) == min(abs(hv_data[["y_plot"]] - hv_data[["y"]])),
+                           !(colnames(hv_data) %in% c("x", "y"))]
+         },
+         differential = {
+           hv_data <- data.frame(x = hv[["x"]],
+                                 y = hv[["y"]],
+                                 Start = plot_data[[hv[["mapping"]][["x"]]]],
+                                 End = plot_data[["End"]],
+                                 y_plot = plot_data[[hv[["mapping"]][["y"]]]],
+                                 Sequence = plot_data[["Sequence"]])
+
+           tt_df <- hv_data[hv_data[["x"]] > hv_data[["Start"]] &
+                               hv_data[["x"]] < hv_data[["End"]] &
+                              abs(hv_data[["y_plot"]] - hv_data[["y"]]) < 10 &
+                              abs(hv_data[["y_plot"]] - hv_data[["y"]]) == min(abs(hv_data[["y_plot"]] - hv_data[["y"]])),
+                            !(colnames(hv_data) %in% c("x", "y"))]
+         }
+  )
   tt_df
 }
 
@@ -89,31 +120,37 @@ prepare_tt_data = function(hv, plot_out, plot_type = "point") {
 #' @inheritParams prepare_tt_data
 #' @param tt_cols Vector of strings. Names of columns to display in tooltip.
 #' @export
-#' 
+#'
 
-generate_tooltip = function(hv, plot_out, plot_type, tt_cols) {
-  
+generate_tooltip = function(hv, plot_out, plot_type, tt_content = NULL) {
+
   tt_df = prepare_tt_data(hv, plot_out, plot_type)
-  
-  if(nrow(tt_df) != 0) { 
+
+  if(nrow(tt_df) != 0) {
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
                          "left", "right")
-    
+
     tt_pos <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
-                     hv[["coords_css"]][["x"]], 
+                     hv[["coords_css"]][["x"]],
                      hv[["range"]][["right"]]/hv[["img_css_ratio"]][["x"]] - hv[["coords_css"]][["x"]])
-    
+
     style <- paste0("position:absolute; z-index:1000; background-color: rgba(245, 245, 245, 1); pointer-events: none;",
-                    tt_pos_adj, ":", tt_pos, 
+                    tt_pos_adj, ":", tt_pos,
                     "px; top:", hv[["coords_css"]][["y"]], "px; padding: 0px;")
-    
-    tt_df = tt_df %>% 
-      select(tt_cols)
+
+    if(is.null(tt_content)) {
+      content = paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))
+    }else {
+      text = paste(tt_content[["row_text"]], c(rep(" <br/> ", length(tt_content[["row_text"]]) - 1), ""), sep = "", collapse = "")
+      content = do.call(sprintf, c(list(text), lapply(tt_content[["chosen_cols"]], function(i) tt_df[[i]])))
+    }
+
     div(style = style,
-        p(HTML(paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))))
+        p(HTML(content))
     )
   }
 }
+
 
 
 #' @title  UI for tabset panel.
@@ -126,50 +163,48 @@ tabsetPanel_UI <- function(id, label = NULL) {
   tagList(tabsetPanel(tabPanel(title = paste(id, "plot"),
                                br(),
                                div(style = "position:relative",
-                                   plotOutput_h(ns("plot"),  
-                                                hover = hoverOpts(ns("hover"), 
-                                                                  delay = 10, 
+                                   plotOutput_h(ns("plot"),
+                                                hover = hoverOpts(ns("hover"),
+                                                                  delay = 10,
                                                                   delayType = "debounce")),
                                    uiOutput(ns("tooltip")),
                                    downloadButton(ns("download_png"), "Download png"),
                                    downloadButton(ns("download_jpeg"), "Download jpeg"),
                                    downloadButton(ns("download_svg"), "Download svg"))
   ),
-  tabPanel(title = paste(id, "data"), 
+  tabPanel(title = paste(id, "data"),
            tableOutput_h(ns("data")))))
 }
 
 
 #' @title  Server for tabset panel.
 #' @description  Creates module server for tabset panel with plot and table.
-#' @param id Id name of tabset panel.
+#' @param id Id of tabset panel.
 #' @inheritParams generate_tooltip
 #' @export
 
 
-tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point", 
-                               tt_cols = colnames(table_out())) {
-  
-  if(!(plot_type %in% c("bar", "point"))) stop("plot_type must be either bar or point.")
-  
+tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point", tt_content = list()) {
+
+  if(!(plot_type %in% c("bar", "point", "comparison", "differential"))) stop("plot_type must be either bar, differential, comparison or point.")
+
   moduleServer(id, function(input, output, session) {
     output[["plot"]] <- renderPlot({plot_out()})
-    
+
     output[["tooltip"]] <- renderUI({
       hv = input[["hover"]]
       if(!is.null(hv)) {
-        generate_tooltip(hv, plot_out, plot_type, tt_cols)
+        generate_tooltip(hv, plot_out, plot_type, tt_content)
       }
     })
-    
+
     output[["download_png"]] <- generate_downloadButton(id, plot_out, "png")
     output[["download_jpeg"]] <- generate_downloadButton(id, plot_out, "jpeg")
     output[["download_svg"]] <- generate_downloadButton(id, plot_out, "svg")
-    
+
     output[["data"]] <- DT::renderDataTable(server = FALSE, {
-      table_out() %>% 
-        dt_format()
+      dt_format(table_out())
     })
-    
+
   })
 }
