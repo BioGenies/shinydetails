@@ -20,5 +20,5 @@ generate_downloadButton(id, plot_out, device)
 Generates download button.
 }
 \details{
-
+This function uses \code{\link[shiny]{downloadHandler}}.
 }

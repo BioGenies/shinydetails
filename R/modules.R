@@ -31,6 +31,7 @@ tabsetPanel_UI <- function(id) {
 #' @param plot_type Type of plot. Type of plot. Accepts either \code{'point'}, \code{'comparison'},
 #' \code{'differential'} or \code{'bar'}. Default \code{'point'}.
 #' @param tt_content Optional
+#' @importFrom DT renderDataTable
 #' @export
 
 

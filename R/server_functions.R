@@ -43,8 +43,9 @@ dt_format <- function(dat, cols = colnames(dat)) {
 #' @param plot_out Reactive. Plot to save.
 #' @param device Parameter from \code{\link[ggplot2]{ggsave}}.
 #' @return \code{generate_downloadButton} returns output of \code{downloadHandler} for given plot and device.
-#' @details This function uses \code{\link[shiny]{downloadHandler}
+#' @details This function uses \code{\link[shiny]{downloadHandler}}.
 #' @export
+#' @importFrom ggplot2 ggsave
 
 generate_downloadButton = function(id, plot_out, device) {
   downloadHandler(paste0(id, "_plot.", device),
