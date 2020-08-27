@@ -1,0 +1,27 @@
+Package: gslope
+Type: Package
+Title: Graphical SLOPE
+Version: 0.1.0
+Authors: Krystyna Grzesiak, Zofia Dziedzic, Tomasz Kulik, Michał Makowski, Mateusz Staniak
+Description: Computation of precision matrix based on graphical SLOPE.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown,
+    spelling
+Imports:
+    SLOPE,
+    igraph,
+    ggplot2,
+    GGally,
+    Rcpp
+RoxygenNote: 7.1.0.9000
+VignetteBuilder: knitr
+Language: en-US
+LinkingTo: 
+    Rcpp,
+    SLOPE,
+    RcppArmadillo

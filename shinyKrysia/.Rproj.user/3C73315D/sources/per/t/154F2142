@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1598534358337.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "703372353",
+    "id" : "154F2142",
+    "lastKnownWriteTime" : 1598545819,
+    "last_content_update" : 1598545819601,
+    "path" : "G:/shiny_comp/shinyKrysia/R/modules.R",
+    "project_path" : "R/modules.R",
+    "properties" : {
+        "cursorPosition" : "54,43",
+        "scrollLine" : "41"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
