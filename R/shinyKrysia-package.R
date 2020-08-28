@@ -4,5 +4,29 @@
 #' @docType package
 #' @name shinyKrysia-package
 #' @aliases shinyKrysia
-#' @importFrom stats filter
+#' @importFrom ggplot2 ggplot_build
+#' @importFrom ggplot2 ggsave
+#' @importFrom shiny tabsetPanel
+#' @importFrom shiny tabPanel
+#' @importFrom shiny tagList
+#' @importFrom shiny downloadButton
+#' @importFrom shiny moduleServer
+#' @importFrom shiny plotOutput
+#' @importFrom shiny downloadHandler
+#' @importFrom shiny sliderInput
+#' @importFrom shiny numericInput
+#' @importFrom shiny dataTableOutput
+#' @importFrom shiny nearPoints
+#' @importFrom shiny div
+#' @importFrom shiny HTML
+#' @importFrom shiny p
+#' @importFrom shiny uiOutput
+#' @importFrom shiny hoverOpts
+#' @importFrom shiny NS
+#' @importFrom shiny renderPlot
+#' @importFrom shiny renderUI
+#' @importFrom shiny br
+#' @importFrom shinyhelper helper
+#' @importFrom DT datatable
+#'
 NULL

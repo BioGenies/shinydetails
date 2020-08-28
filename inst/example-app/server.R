@@ -1,4 +1,5 @@
 library(shiny)
+source("example.R")
 
 shinyServer(function(input, output) {
 
