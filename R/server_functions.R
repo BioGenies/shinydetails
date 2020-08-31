@@ -19,10 +19,10 @@ tableOutput_h <- function(inputId, ...) {
 
 
 #' @title Table widget
-#' @description  \code{dt_format} is a function for creating a graphical widget containing a table with download buttons.
+#' @description  \code{dt_format} is a function for creating a graphical widget containing a table with download buttons (Excel and CSV).
 #' @param dat Dataset. A matrix or data frame.
 #' @param cols Names of columns to display.
-#' @details This function uses \code{\link[DT]{datatable}}
+#' @details This function uses \code{\link[DT]{datatable}}.
 #' @export
 #'
 
@@ -42,13 +42,13 @@ dt_format <- function(dat, cols = colnames(dat)) {
 #' @param id Id name of tabset panel.
 #' @param plot_out Reactive. Plot to save.
 #' @param device Parameter from \code{\link[ggplot2]{ggsave}}.
-#' @return \code{generate_downloadButton} returns output of \code{downloadHandler} for given plot and device.
+#' @return \code{generate_downloadButton} returns the output of \code{downloadHandler} for given plot and device.
 #' @details This function uses \code{\link[shiny]{downloadHandler}}.
 #' @export
 #' @importFrom ggplot2 ggsave
 
 generate_downloadButton = function(id, plot_out, device) {
-  downloadHandler(paste0(id, "_plot.", device),
+  downloadHandler(filename = paste0(id, "_plot.", device),
                   content = function(file){
                     ggsave(file, plot_out(), device = device, height = 300,
                            width = 400, units = "mm")})

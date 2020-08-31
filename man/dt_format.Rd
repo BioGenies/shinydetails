@@ -12,8 +12,8 @@ dt_format(dat, cols = colnames(dat))
 \item{cols}{Names of columns to display.}
 }
 \description{
-\code{dt_format} is a function for creating a graphical widget containing a table with download buttons.
+\code{dt_format} is a function for creating a graphical widget containing a table with download buttons (Excel and CSV).
 }
 \details{
-This function uses \code{\link[DT]{datatable}}
+This function uses \code{\link[DT]{datatable}}.
 }

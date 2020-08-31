@@ -56,6 +56,5 @@ tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point", tt_
     output[["data"]] <- DT::renderDataTable(server = FALSE, {
       dt_format(table_out())
     })
-
   })
 }
