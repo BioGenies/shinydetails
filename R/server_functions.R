@@ -65,12 +65,12 @@ generate_downloadButton = function(id, plot_out, device) {
 #' @export
 
 
-prepare_tt_data = function(hv, plot_out, plot_type = "point") {
+prepare_tt_data = function(hv, plot_out, plot_type = "geom_point") {
 
   plot_data = plot_out()[["data"]]
 
   switch(plot_type,
-         bar = {
+         geom_colxxx = {
            plot_data_info = ggplot_build(plot_out())[["data"]][[1]]
            hv_data = data.frame(x = hv[["x"]],
                                 y = hv[["y"]],
@@ -80,7 +80,7 @@ prepare_tt_data = function(hv, plot_out, plot_type = "point") {
            tt_df = hv_data[hv_data[["x"]] < hv_data[["xmax"]] & hv_data[["x"]] >= hv_data[["xmin"]],
                            !(colnames(hv_data) %in% c("x", "y", "xmax", "xmin"))]
          },
-         point = {
+         geom_point = {
            tt_df = nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
          },
          comparison = {
@@ -151,3 +151,4 @@ generate_tooltip = function(hv, plot_out, plot_type, tt_content) {
     )
   }
 }
+
