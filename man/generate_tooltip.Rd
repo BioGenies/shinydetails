@@ -11,7 +11,8 @@ generate_tooltip(hv, plot_out, plot_type, tt_content)
 
 \item{plot_out}{Reactive. Plot to extract data from.}
 
-\item{plot_type}{Type of plot. Accepts either \code{'point'}, \code{'comparison'} or \code{'bar'}. Default \code{'point'}.}
+\item{plot_type}{Type of plot. Accepts either \code{'point'}, \code{'comparison'}
+or \code{'bar'}. Default \code{'point'}.}
 
 \item{tt_content}{Content}
 }

@@ -27,6 +27,7 @@
 #' @importFrom shiny renderUI
 #' @importFrom shiny br
 #' @importFrom shinyhelper helper
+#' @importFrom shinyhelper observe_helpers
 #' @importFrom DT datatable
 #'
 NULL

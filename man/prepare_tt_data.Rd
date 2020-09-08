@@ -11,7 +11,8 @@ prepare_tt_data(hv, plot_out, plot_type = "geom_point")
 
 \item{plot_out}{Reactive. Plot to extract data from.}
 
-\item{plot_type}{Type of plot. Accepts either \code{'point'}, \code{'comparison'} or \code{'bar'}. Default \code{'point'}.}
+\item{plot_type}{Type of plot. Accepts either \code{'point'}, \code{'comparison'}
+or \code{'bar'}. Default \code{'point'}.}
 }
 \value{
 \code{prepare_tt_data} returns prepared data frame containing one record.
@@ -20,5 +21,6 @@ prepare_tt_data(hv, plot_out, plot_type = "geom_point")
 Prepares data in order that it may be displayed in tooltip.
 }
 \details{
-This function filters one row of the imputed data in order that it coresponds the most to the hoover coordinates.
+This function filters one row of the imputed data in order that it
+coresponds the most to the hoover coordinates.
 }

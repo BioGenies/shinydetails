@@ -14,7 +14,8 @@ generate_downloadButton(id, plot_out, device)
 \item{device}{Parameter from \code{\link[ggplot2]{ggsave}}.}
 }
 \value{
-\code{generate_downloadButton} returns the output of \code{downloadHandler} for given plot and device.
+\code{generate_downloadButton} returns the output of \code{downloadHandler}
+for given plot and device.
 }
 \description{
 Generates download button.
