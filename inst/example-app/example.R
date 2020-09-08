@@ -24,9 +24,9 @@ prepare_data <- function(input, plt = "comparison") {
                                              function(i) calculate_state_deuteration(dat_raw,
                                                                                      protein = chosen_protein,
                                                                                      state = i,
-                                                                                     time_in = in_time,
-                                                                                     time_chosen = chosen_time,
-                                                                                     time_out = out_time,
+                                                                                     time_0 = in_time,
+                                                                                     time_t = chosen_time,
+                                                                                     time_100 = out_time,
                                                                                      deut_part = 0.01*deut_concentration)))
           },
           differential = {
@@ -40,9 +40,9 @@ prepare_data <- function(input, plt = "comparison") {
             prepared_dat <- generate_differential_data_set(dat = dat_raw,
                                                            states = two_states,
                                                            protein = chosen_protein,
-                                                           time_in = in_time,
-                                                           time_chosen = chosen_time,
-                                                           time_out = out_time,
+                                                           time_0 = in_time,
+                                                           time_t = chosen_time,
+                                                           time_100 = out_time,
                                                            deut_part = 0.01*deut_concentration)
           },
           bar = {

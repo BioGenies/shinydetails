@@ -2,11 +2,15 @@
 
 
 #' @title  UI for tabset panel.
-#' @description  Creates module ui for tabset panel. It contains two tabs - with plot and an elegenat table with respective data.
+#' @description  Creates module ui for tabset panel. It contains two tabs - with
+#' plot and an elegenat table with respective data.
 #' @param id Id name of tabset panel.
-#' @param tab_plot Character. Title of tab containing plot. Default to \code{paste(id, "plot")}.
-#' @param tab_table Character. Title of tab containing table. Default to \code{paste(id, "data")}.
-#' @details \code{tabsetPanel_UI} provides three download buttons (png, svg and jpeg) and tooltip for plot and helpers for both plot and table.
+#' @param tab_plot Character. Title of tab containing plot. Default to
+#' \code{paste(id, "plot")}.
+#' @param tab_table Character. Title of tab containing table. Default to
+#' \code{paste(id, "data")}.
+#' @details \code{tabsetPanel_UI} provides three download buttons (png, svg and jpeg)
+#' and tooltip for plot and helpers for both plot and table.
 #' @export
 
 tabsetPanel_UI <- function(id,
@@ -35,16 +39,22 @@ tabsetPanel_UI <- function(id,
 #' @param id Id of tabset panel.
 #' @param plot_out Reactive. Plot to display in tab.
 #' @param table_out Reactive. Table to display in tab.
-#' @param plot_type Type of plot. Accepts either \code{'point'}, \code{'comparison'},
-#' \code{'differential'} or \code{'bar'}. Default \code{'point'}.
-#' @param tt_content Optional
+#' @param plot_type Type of plot. Accepts either \code{'geom_point'},
+#' \code{'comparison'},
+#' \code{'differential'} or \code{'geom_col'}. Default \code{'geom_point'}.
+#' @param tt_content Optional.
+#' @param hlpfiles A logical value indicating whether empty helpfiles should be
+#' created automatically. Default \code{FALSE}.
 #' @importFrom DT renderDataTable
 #' @export
 
 
-tabsetPanel_SERVER <- function(id, plot_out, table_out, plot_type = "point", tt_content = NULL) {
+tabsetPanel_SERVER <- function(id, plot_out, table_out,
+                               plot_type = "point", tt_content = NULL,
+                               helpfiles = FALSE) {
 
-  if(!(plot_type %in% c("geom_col", "geom_point", "comparison", "differential"))) stop("plot_type must be either bar, differential, comparison or point.")
+  if(!(plot_type %in% c("geom_col", "geom_point", "comparison", "differential")))
+    stop("plot_type must be either bar, differential, comparison or point.")
 
   moduleServer(id, function(input, output, session) {
     output[["plot"]] <- renderPlot({plot_out()})

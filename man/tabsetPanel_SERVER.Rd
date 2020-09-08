@@ -15,12 +15,12 @@ tabsetPanel_SERVER(
 \arguments{
 \item{id}{Id of tabset panel.}
 
-\item{plot_out}{Reactive. Plot to display in tabset panel.}
+\item{plot_out}{Reactive. Plot to display in tab.}
 
-\item{table_out}{Reactive. Table to display in tabset panel.}
+\item{table_out}{Reactive. Table to display in tab.}
 
-\item{plot_type}{Type of plot. Type of plot. Accepts either \code{'point'}, \code{'comparison'},
-\code{'differential'} or \code{'bar'}. Default \code{'point'}.}
+\item{plot_type}{Type of plot. Accepts either \code{'geom_point'}, \code{'comparison'},
+\code{'differential'} or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_content}{Optional}
 }

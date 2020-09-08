@@ -1,16 +1,51 @@
 
+#' @title Plot output with helper
+#' @description  Renders plot with helper within an application.
+#' Same as \code{helper(plotOutput(outputId, ...))}
+#' @inheritParams shiny::plotOutput
+#' @param ... Optional arguments for \code{plotOutput}.
+#' @details This function uses \code{\link[shinyhelper]{helper}}.
+#' @export
+#'
+
 plotOutput_h <- function(outputId, ...) {
   helper(plotOutput(outputId, ...), content = outputId, type = "markdown")
 }
 
+#' @title Slider input with helper.
+#' @description  Constructs a slider widget with helper.
+#' Same as \code{helper(sliderInput(outputId, ...))}
+#' @inheritParams shiny::sliderInput
+#' @param ... Optional arguments for \code{sliderInput}.
+#' @details This function uses \code{\link[shinyhelper]{helper}}.
+#' @export
+#'
 
 sliderInput_h <- function(inputId, ...) {
   helper(sliderInput(inputId, ...), content = inputId, type = "markdown")
 }
 
+#' @title Numeric input with helper.
+#' @description  Constructs a numeric input with helper.
+#' Same as \code{helper(numericInput(outputId, ...))}
+#' @inheritParams shiny::numericInput
+#' @param ... Optional arguments for \code{numericInput}.
+#' @details This function uses \code{\link[shinyhelper]{helper}}.
+#' @export
+#'
+
 numericInput_h <- function(inputId, ...) {
   helper(numericInput(inputId, ...), content = inputId, type = "markdown")
 }
+
+#' @title Table output with helper.
+#' @description  Renders table with helper within an application.
+#' Same as \code{helper(dataTableOutput(outputId, ...))}
+#' @inheritParams shiny::dataTableOutput
+#' @param ... Optional arguments for \code{dataTableOutput}.
+#' @details This function uses \code{\link[shinyhelper]{helper}}.
+#' @export
+#'
 
 
 tableOutput_h <- function(inputId, ...) {
@@ -19,7 +54,8 @@ tableOutput_h <- function(inputId, ...) {
 
 
 #' @title Table widget
-#' @description  \code{dt_format} is a function for creating a graphical widget containing a table with download buttons (Excel and CSV).
+#' @description  \code{dt_format} is a function for creating a graphical
+#' widget containing a table with download buttons (Excel and CSV).
 #' @param dat Dataset. A matrix or data frame.
 #' @param cols Names of columns to display.
 #' @details This function uses \code{\link[DT]{datatable}}.
@@ -31,7 +67,10 @@ dt_format <- function(dat, cols = colnames(dat)) {
             colnames = cols,
             class = "table-bordered table-condensed",
             extensions = "Buttons",
-            options = list(pageLength = 10, dom = "tBip", autoWidth = TRUE, buttons = c("excel", "csv")),
+            options = list(pageLength = 10,
+                           dom = "tBip",
+                           autoWidth = TRUE,
+                           buttons = c("excel", "csv")),
             filter = "bottom",
             rownames = FALSE)
 }
@@ -42,7 +81,8 @@ dt_format <- function(dat, cols = colnames(dat)) {
 #' @param id Id name of tabset panel.
 #' @param plot_out Reactive. Plot to save.
 #' @param device Parameter from \code{\link[ggplot2]{ggsave}}.
-#' @return \code{generate_downloadButton} returns the output of \code{downloadHandler} for given plot and device.
+#' @return \code{generate_downloadButton} returns the output of \code{downloadHandler}
+#' for given plot and device.
 #' @details This function uses \code{\link[shiny]{downloadHandler}}.
 #' @export
 #' @importFrom ggplot2 ggsave
@@ -59,9 +99,11 @@ generate_downloadButton = function(id, plot_out, device) {
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
 #' @param plot_out Reactive. Plot to extract data from.
-#' @param plot_type Type of plot. Accepts either \code{'point'}, \code{'comparison'} or \code{'bar'}. Default \code{'point'}.
+#' @param plot_type Type of plot. Accepts either \code{'point'}, \code{'comparison'}
+#' or \code{'bar'}. Default \code{'point'}.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
-#' @details This function filters one row of the imputed data in order that it coresponds the most to the hoover coordinates.
+#' @details This function filters one row of the imputed data in order that it
+#' coresponds the most to the hoover coordinates.
 #' @export
 
 
@@ -70,7 +112,7 @@ prepare_tt_data = function(hv, plot_out, plot_type = "geom_point") {
   plot_data = plot_out()[["data"]]
 
   switch(plot_type,
-         geom_colxxx = {
+         geom_col = {
            plot_data_info = ggplot_build(plot_out())[["data"]][[1]]
            hv_data = data.frame(x = hv[["x"]],
                                 y = hv[["y"]],
@@ -142,7 +184,9 @@ generate_tooltip = function(hv, plot_out, plot_type, tt_content) {
     if(is.null(tt_content)) {
       content = paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))
     }else {
-      text = paste(tt_content[["row_text"]], c(rep(" <br/> ", length(tt_content[["row_text"]]) - 1), ""), sep = "", collapse = "")
+      text = paste(tt_content[["row_text"]],
+                   c(rep(" <br/> ", length(tt_content[["row_text"]]) - 1), ""),
+                   sep = "", collapse = "")
       content = do.call(sprintf, c(list(text), lapply(tt_content[["chosen_cols"]], function(i) tt_df[[i]])))
     }
 

@@ -4,11 +4,18 @@
 \alias{tabsetPanel_UI}
 \title{UI for tabset panel.}
 \usage{
-tabsetPanel_UI(id)
+tabsetPanel_UI(id, tab_plot = paste(id, "plot"), tab_table = paste(id, "data"))
 }
 \arguments{
 \item{id}{Id name of tabset panel.}
+
+\item{tab_plot}{Character. Title of tab containing plot. Default to \code{paste(id, "plot")}.}
+
+\item{tab_table}{Character. Title of tab containing table. Default to \code{paste(id, "data")}.}
 }
 \description{
-Creates module ui for tabset panel with plot and table.
+Creates module ui for tabset panel. It contains two tabs - with plot and an elegenat table with respective data.
+}
+\details{
+\code{tabsetPanel_UI} provides three download buttons (png, svg and jpeg) and tooltip for plot and helpers for both plot and table.
 }

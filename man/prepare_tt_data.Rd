@@ -4,7 +4,7 @@
 \alias{prepare_tt_data}
 \title{Tooltip data}
 \usage{
-prepare_tt_data(hv, plot_out, plot_type = "point")
+prepare_tt_data(hv, plot_out, plot_type = "geom_point")
 }
 \arguments{
 \item{hv}{Hoover.}

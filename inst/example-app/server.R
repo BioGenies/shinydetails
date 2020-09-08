@@ -68,10 +68,10 @@ shinyServer(function(input, output) {
                      plot_type = "differential",
                      tt_content = list(row_text = c("%s",  "Position: %i - %i", "Value: %f"),
                                        chosen_cols = c("Sequence", "Start", "End", "y_plot")))
-  tabsetPanel_SERVER(id = "bar",
+  tabsetPanel_SERVER(id = "geom_col",
                      plot_out = bar_plot_out,
                      table_out = bar_data,
-                     plot_type = "bar",
+                     plot_type = "geom_col",
                      tt_content = NULL)
 
 })
