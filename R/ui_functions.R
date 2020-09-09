@@ -3,7 +3,7 @@
 #' @description  Renders plot with helper within an application.
 #' Same as \code{helper(plotOutput(outputId, ...))}
 #' @inheritParams shiny::plotOutput
-#' @inheritParams tabsetPanel_SERVER
+#' @inheritParams tabsetPanel_UI
 #' @param ... Optional arguments for \code{plotOutput}.
 #' @details This function uses \code{\link[shinyhelper]{helper}}.
 #' @export
@@ -46,7 +46,7 @@ numericInput_h <- function(inputId, ...) {
 #' @description  Renders table with helper within an application.
 #' Same as \code{helper(dataTableOutput(outputId, ...))}
 #' @inheritParams shiny::dataTableOutput
-#' @inheritParams tabsetPanel_SERVER
+#' @inheritParams tabsetPanel_UI
 #' @param ... Optional arguments for \code{dataTableOutput}.
 #' @details This function uses \code{\link[shinyhelper]{helper}}.
 #' @export
