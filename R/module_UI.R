@@ -7,7 +7,7 @@
 #' \code{paste(id, "plot")}.
 #' @param tab_table Character. Title of tab containing table. Default to
 #' \code{paste(id, "data")}.
-#' @param hlpfiles A character string denoting directory to save empty help files.
+#' @param helpfiles A character string denoting directory to save empty help files.
 #' If \code{NULL} help files will not be created. Default \code{NULL}.
 #' @details \code{tabsetPanel_UI} provides three download buttons (png, svg and jpeg)
 #' and tooltip for plot and helpers for both plot and table.

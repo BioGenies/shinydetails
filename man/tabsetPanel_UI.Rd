@@ -20,7 +20,7 @@ tabsetPanel_UI(
 \item{tab_table}{Character. Title of tab containing table. Default to
 \code{paste(id, "data")}.}
 
-\item{hlpfiles}{A character string denoting directory to save empty help files.
+\item{helpfiles}{A character string denoting directory to save empty help files.
 If \code{NULL} help files will not be created. Default \code{NULL}.}
 }
 \description{

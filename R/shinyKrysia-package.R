@@ -28,6 +28,7 @@
 #' @importFrom shiny br
 #' @importFrom shinyhelper helper
 #' @importFrom shinyhelper observe_helpers
+#' @importFrom shinyhelper create_help_files
 #' @importFrom DT datatable
 #'
 NULL

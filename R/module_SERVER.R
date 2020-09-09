@@ -7,6 +7,8 @@
 #' @param plot_out Reactive. Plot to display in tab.
 #' @param table_out Reactive. Table to display in tab.
 #' @param plot_type Type of plot. Accepts either \code{'geom_point'},
+#' @param helpfiles A character string denoting directory to save empty help files.
+#' If \code{NULL} help files will not be created. Default \code{NULL}.
 #' \code{'comparison'},
 #' \code{'differential'} or \code{'geom_col'}. Default \code{'geom_point'}.
 #' @param tt_content Optional.
@@ -15,7 +17,8 @@
 
 
 tabsetPanel_SERVER <- function(id, plot_out, table_out,
-                               plot_type = "point", tt_content = NULL) {
+                               plot_type = "point", tt_content = NULL,
+                               helpfiles = NULL) {
 
   if(!(plot_type %in% c("geom_col", "geom_point", "comparison", "differential")))
     stop("plot_type must be either bar, differential, comparison or point.")

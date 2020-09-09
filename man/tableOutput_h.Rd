@@ -9,6 +9,9 @@ tableOutput_h(outputId, helpfiles = NULL, ...)
 \arguments{
 \item{outputId}{output variable to read the table from}
 
+\item{helpfiles}{A character string denoting directory to save empty help files.
+If \code{NULL} help files will not be created. Default \code{NULL}.}
+
 \item{...}{Optional arguments for \code{dataTableOutput}.}
 }
 \description{

@@ -9,7 +9,8 @@ tabsetPanel_SERVER(
   plot_out,
   table_out,
   plot_type = "point",
-  tt_content = NULL
+  tt_content = NULL,
+  helpfiles = NULL
 )
 }
 \arguments{
@@ -19,11 +20,14 @@ tabsetPanel_SERVER(
 
 \item{table_out}{Reactive. Table to display in tab.}
 
-\item{plot_type}{Type of plot. Accepts either \code{'geom_point'},
-\code{'comparison'},
-\code{'differential'} or \code{'geom_col'}. Default \code{'geom_point'}.}
+\item{plot_type}{Type of plot. Accepts either \code{'geom_point'},}
 
 \item{tt_content}{Optional.}
+
+\item{helpfiles}{A character string denoting directory to save empty help files.
+If \code{NULL} help files will not be created. Default \code{NULL}.
+\code{'comparison'},
+\code{'differential'} or \code{'geom_col'}. Default \code{'geom_point'}.}
 }
 \description{
 Creates module server for tabset panel with plot and table.
