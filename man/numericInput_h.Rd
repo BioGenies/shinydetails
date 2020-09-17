@@ -4,10 +4,12 @@
 \alias{numericInput_h}
 \title{Numeric input with helper.}
 \usage{
-numericInput_h(inputId, ...)
+numericInput_h(inputId, helpfiles = "helpfiles", ...)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
+
+\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
 
 \item{...}{Optional arguments for \code{numericInput}.}
 }

@@ -4,13 +4,12 @@
 \alias{plotOutput_h}
 \title{Plot output with helper}
 \usage{
-plotOutput_h(outputId, helpfiles = NULL, ...)
+plotOutput_h(outputId, helpfiles = "helpfiles", ...)
 }
 \arguments{
 \item{outputId}{output variable to read the plot/image from.}
 
-\item{helpfiles}{A character string denoting directory to save empty help files.
-If \code{NULL} help files will not be created. Default \code{NULL}.}
+\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
 
 \item{...}{Optional arguments for \code{plotOutput}.}
 }

@@ -4,10 +4,12 @@
 \alias{sliderInput_h}
 \title{Slider input with helper.}
 \usage{
-sliderInput_h(inputId, ...)
+sliderInput_h(inputId, helpfiles = "helpfiles", ...)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
+
+\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
 
 \item{...}{Optional arguments for \code{sliderInput}.}
 }
