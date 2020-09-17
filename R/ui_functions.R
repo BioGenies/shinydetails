@@ -10,8 +10,11 @@
 #'
 
 plotOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
-  create_help_files(outputId, help_dir = helpfiles)
-  helper(plotOutput(outputId, ...), content = outputId, type = "markdown")
+  create_help_files(files = outputId,
+                    help_dir = "helpfiles")
+  helper(plotOutput(outputId, ...),
+         content = outputId,
+         type = "markdown")
 }
 
 #' @title Slider input with helper.
@@ -25,8 +28,11 @@ plotOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
 #'
 
 sliderInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
-  create_help_files(inputId, help_dir = helpfiles)
-  helper(sliderInput(inputId, ...), content = inputId, type = "markdown")
+  create_help_files(files = inputId,
+                    help_dir = helpfiles)
+  helper(sliderInput(inputId, ...),
+         content = inputId,
+         type = "markdown")
 }
 
 #' @title Numeric input with helper.
@@ -40,8 +46,11 @@ sliderInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
 #'
 
 numericInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
-  create_help_files(inputId, help_dir = helpfiles)
-  helper(numericInput(inputId, ...), content = inputId, type = "markdown")
+  create_help_files(files = inputId,
+                    help_dir = helpfiles)
+  helper(numericInput(inputId, ...),
+         content = inputId,
+         type = "markdown")
 }
 
 #' @title Table output with helper.
@@ -55,6 +64,9 @@ numericInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
 
 
 tableOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
-  create_help_files(outputId, help_dir = helpfiles)
-  helper(dataTableOutput(outputId, ...), content = outputId, type = "markdown")
+  create_help_files(files = outputId,
+                    help_dir = "helpfiles")
+  helper(dataTableOutput(outputId, ...),
+         content = outputId,
+         type = "markdown")
 }

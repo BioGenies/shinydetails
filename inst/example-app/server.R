@@ -1,5 +1,7 @@
 library(shiny)
-source("example.R")
+library(HaDeX)
+library(shinydetails)
+source("prepare_data.R")
 
 shinyServer(function(input, output) {
 

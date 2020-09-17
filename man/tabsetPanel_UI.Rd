@@ -8,7 +8,7 @@ tabsetPanel_UI(
   id,
   tab_plot = paste(id, "plot"),
   tab_table = paste(id, "data"),
-  helpfiles = NULL
+  helpfiles = "helpfiles"
 )
 }
 \arguments{
@@ -20,8 +20,7 @@ tabsetPanel_UI(
 \item{tab_table}{Character. Title of tab containing table. Default to
 \code{paste(id, "data")}.}
 
-\item{helpfiles}{A character string denoting directory to save empty help files.
-If \code{NULL} help files will not be created. Default \code{NULL}.}
+\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
 }
 \description{
 Creates module ui for tabset panel. It contains two tabs - with

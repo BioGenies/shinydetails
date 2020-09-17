@@ -63,14 +63,4 @@ prepare_data <- function(input, plt = "comparison") {
   prepared_dat
 }
 
-#' @title An example component
-#' @description  Run an example app using shiny component
-#' @importFrom shiny runApp
-#' @export
-run_example_app <- function() {
-  runApp(system.file("example-app", package = "shinyKrysia"))
-}
-
-
-
 

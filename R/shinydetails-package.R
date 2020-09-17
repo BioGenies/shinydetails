@@ -1,9 +1,9 @@
-#' shinyKrysia
+#' shinydetails
 #'
 #' @description Useful Shiny stuff.
 #' @docType package
-#' @name shinyKrysia-package
-#' @aliases shinyKrysia
+#' @name shinydetails-package
+#' @aliases shinydetails
 #' @importFrom ggplot2 ggplot_build
 #' @importFrom ggplot2 ggsave
 #' @importFrom shiny tabsetPanel
