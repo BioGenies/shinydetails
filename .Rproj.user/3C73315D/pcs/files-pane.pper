@@ -1,9 +1,9 @@
 {
-    "path": "C:/Users/Kanti/Desktop/praktyki/shinydetails/R",
+    "path": "C:/Users/Kanti/Desktop/praktyki/shinydetails",
     "sortOrder": [
         {
-            "ascending": true,
-            "columnIndex": 2
+            "columnIndex": 2,
+            "ascending": true
         }
     ]
 }

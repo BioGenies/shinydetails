@@ -22,7 +22,6 @@ tabsetPanel_UI <- function(id,
                                br(),
                                div(style = "position:relative",
                                    plotOutput_h(outputId = ns("plot"),
-                                                helpfiles = helpfiles,
                                                 hover = hoverOpts(ns("hover"),
                                                                   delay = 10,
                                                                   delayType = "debounce")),
@@ -32,6 +31,5 @@ tabsetPanel_UI <- function(id,
                                    downloadButton(ns("download_svg"), "Download svg"))
   ),
   tabPanel(title = tab_table,
-           tableOutput_h(outputId = ns("data"),
-                         helpfiles = helpfiles))))
+           tableOutput_h(outputId = ns("data")))))
 }
