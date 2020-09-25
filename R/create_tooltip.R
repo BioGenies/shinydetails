@@ -45,8 +45,8 @@ generate_downloadButton <- function(id, plot_out, device) {
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
 #' @param plot_out Reactive. Plot to extract data from.
-#' @param plot_type Type of plot. Accepts either \code{'point'}, \code{'comparison'}
-#' or \code{'bar'}. Default \code{'point'}.
+#' @param plot_type Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+#' or \code{'geom_col'}. Default \code{'geom_point'}.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
 #' @details This function filters one row of the imputed data in order that it
 #' coresponds the most to the hoover coordinates.
@@ -55,46 +55,32 @@ generate_downloadButton <- function(id, plot_out, device) {
 
 prepare_tt_data <- function(hv, plot_out, plot_type = "geom_point") {
 
-  plot_data <- plot_out()[["data"]]
+  plot_data <- as.data.frame(plot_out()[["data"]])
+  plot_data_info <- ggplot_build(plot_out())[["data"]][[1]]
 
   switch(plot_type,
          geom_col = {
-           plot_data_info <- ggplot_build(plot_out())[["data"]][[1]]
            hv_data <- data.frame(x = hv[["x"]],
                                 y = hv[["y"]],
                                 xmin = plot_data_info[["xmin"]],
                                 xmax = plot_data_info[["xmax"]],
                                 plot_data)
-           tt_df <- hv_data[hv_data[["x"]] < hv_data[["xmax"]] & hv_data[["x"]] >= hv_data[["xmin"]],
+           tt_df <- hv_data[hv_data[["x"]] < hv_data[["xmax"]] &
+                              hv_data[["x"]] >= hv_data[["xmin"]],
                            !(colnames(hv_data) %in% c("x", "y", "xmax", "xmin"))]
          },
          geom_point = {
            tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
          },
-         comparison = {
+         geom_segment = {
            hv_data <- data.frame(x = hv[["x"]],
                                  y = hv[["y"]],
-                                 Start = plot_data[[hv[["mapping"]][["x"]]]],
-                                 End = plot_data[["End"]],
+                                 x_start = plot_data[[hv[["mapping"]][["x"]]]],
+                                 x_end = plot_data[[hv[["mapping"]][["xend"]]]],
                                  y_plot = plot_data[[hv[["mapping"]][["y"]]]],
-                                 Sequence = plot_data[["Sequence"]],
-                                 State = plot_data[["State"]])
-           tt_df <- hv_data[hv_data[["x"]] > hv_data[["Start"]] &
-                             hv_data[["x"]] < hv_data[["End"]] &
-                             abs(hv_data[["y_plot"]] - hv_data[["y"]]) < 10 &
-                             abs(hv_data[["y_plot"]] - hv_data[["y"]]) == min(abs(hv_data[["y_plot"]] - hv_data[["y"]])),
-                           !(colnames(hv_data) %in% c("x", "y"))]
-         },
-         differential = {
-           hv_data <- data.frame(x = hv[["x"]],
-                                 y = hv[["y"]],
-                                 Start = plot_data[[hv[["mapping"]][["x"]]]],
-                                 End = plot_data[["End"]],
-                                 y_plot = plot_data[[hv[["mapping"]][["y"]]]],
-                                 Sequence = plot_data[["Sequence"]])
-
-           tt_df <- hv_data[hv_data[["x"]] > hv_data[["Start"]] &
-                              hv_data[["x"]] < hv_data[["End"]] &
+                                 plot_data)
+           tt_df <- hv_data[hv_data[["x"]] > hv_data[["x_start"]] &
+                              hv_data[["x"]] < hv_data[["x_end"]] &
                               abs(hv_data[["y_plot"]] - hv_data[["y"]]) < 10 &
                               abs(hv_data[["y_plot"]] - hv_data[["y"]]) == min(abs(hv_data[["y_plot"]] - hv_data[["y"]])),
                             !(colnames(hv_data) %in% c("x", "y"))]

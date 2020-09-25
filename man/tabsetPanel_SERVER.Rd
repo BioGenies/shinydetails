@@ -20,9 +20,12 @@ tabsetPanel_SERVER(
 
 \item{table_out}{Reactive. Table to display in tab.}
 
-\item{plot_type}{Type of plot. Accepts either \code{'geom_point'},}
+\item{plot_type}{Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_content}{Optional.}
+
+\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
 }
 \description{
 Creates module server for tabset panel with plot and table.

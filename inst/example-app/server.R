@@ -8,7 +8,6 @@ shinyServer(function(input, output) {
   observe_helpers(session = getDefaultReactiveDomain(), help_dir = "helpfiles")
 
   #comparison plot and data
-
   prepared_comparison_dat <- prepare_data(input, "comparison")
 
   comparison_data <- reactive({
@@ -24,7 +23,6 @@ shinyServer(function(input, output) {
   })
 
   #differential plot and data
-
   prepared_differential_dat <- prepare_data(input, "differential")
 
   differential_data <- reactive({
@@ -45,7 +43,6 @@ shinyServer(function(input, output) {
 
 
   #bar plot and data
-
   prepated_distribution_dat <- prepare_data(input, "bar")
 
   bar_data <- reactive({
@@ -61,13 +58,13 @@ shinyServer(function(input, output) {
   tabsetPanel_SERVER(id = "comparison",
                      plot_out = comparison_plot_out,
                      table_out = comparison_data,
-                     plot_type = "comparison",
+                     plot_type = "geom_segment",
                      tt_content = list(row_text = c("%s",  "Position: %i - %i", "Value: %f", "State: %s"),
                                        chosen_cols = c("Sequence", "Start", "End", "y_plot", "State")))
   tabsetPanel_SERVER(id = "differential",
                      plot_out = differential_plot_out,
                      table_out = differential_data,
-                     plot_type = "differential",
+                     plot_type = "geom_segment",
                      tt_content = list(row_text = c("%s",  "Position: %i - %i", "Value: %f"),
                                        chosen_cols = c("Sequence", "Start", "End", "y_plot")))
   tabsetPanel_SERVER(id = "geom_col",
