@@ -5,7 +5,7 @@
 #' @export
 #'
 
-prepare_data <- function(input, plt = "comparison") {
+produce_HaDeX_data <- function(input, plt = "comparison") {
 
   if(!(plt %in% c("bar", "comparison", "differential"))) stop("plot_type must be either bar, differential or comparison.")
 

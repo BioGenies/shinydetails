@@ -1,46 +1,4 @@
 
-#' @title Table widget
-#' @description  \code{dt_format} is a function for creating a graphical
-#' widget containing a table with download buttons (Excel and CSV).
-#' @param dat Dataset. A matrix or data frame.
-#' @param cols Names of columns to display.
-#' @details This function uses \code{\link[DT]{datatable}}.
-#' @export
-#'
-
-dt_format <- function(dat, cols = colnames(dat)) {
-  datatable(data = dat,
-            colnames = cols,
-            class = "table-bordered table-condensed",
-            extensions = "Buttons",
-            options = list(pageLength = 10,
-                           dom = "tBip",
-                           autoWidth = TRUE,
-                           buttons = c("excel", "csv")),
-            filter = "bottom",
-            rownames = FALSE)
-}
-
-
-#' @title Download button
-#' @description  Generates download button.
-#' @param id Id name of tabset panel.
-#' @param plot_out Reactive. Plot to save.
-#' @param device Parameter from \code{\link[ggplot2]{ggsave}}.
-#' @return \code{generate_downloadButton} returns the output of \code{downloadHandler}
-#' for given plot and device.
-#' @details This function uses \code{\link[shiny]{downloadHandler}}.
-#' @export
-#' @importFrom ggplot2 ggsave
-
-generate_downloadButton <- function(id, plot_out, device) {
-  downloadHandler(filename = paste0(id, "_plot.", device),
-                  content = function(file){
-                    ggsave(file, plot_out(), device = device, height = 300,
-                           width = 400, units = "mm")})
-}
-
-
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
@@ -53,7 +11,7 @@ generate_downloadButton <- function(id, plot_out, device) {
 #' @export
 
 
-prepare_tt_data <- function(hv, plot_out, plot_type = "geom_point") {
+produce_tt_data <- function(hv, plot_out, plot_type = "geom_point") {
 
   plot_data <- as.data.frame(plot_out()[["data"]])
   plot_data_info <- ggplot_build(plot_out())[["data"]][[1]]
@@ -92,14 +50,14 @@ prepare_tt_data <- function(hv, plot_out, plot_type = "geom_point") {
 
 #' @title Generate tooltip
 #' @description  Generates tooltip .
-#' @inheritParams prepare_tt_data
+#' @inheritParams produce_tt_data
 #' @param tt_content Content
 #' @export
 #'
 
-generate_tooltip <- function(hv, plot_out, plot_type, tt_content) {
+spark_tooltip <- function(hv, plot_out, plot_type, tt_content) {
 
-  tt_df <- prepare_tt_data(hv, plot_out, plot_type)
+  tt_df <- produce_tt_data(hv, plot_out, plot_type)
 
   if(nrow(tt_df) != 0) {
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,

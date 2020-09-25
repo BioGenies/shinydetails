@@ -9,7 +9,7 @@
 #' @export
 #' @importFrom ggplot2 ggsave
 
-generate_downloadButton <- function(id, plot_out, device) {
+spark_downloadButton <- function(id, plot_out, device) {
   downloadHandler(filename = paste0(id, "_plot.", device),
                   content = function(file){
                     ggsave(file, plot_out(), device = device, height = 300,

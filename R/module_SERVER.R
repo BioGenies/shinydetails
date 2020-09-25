@@ -4,7 +4,7 @@
 #' @param id Id of tabset panel.
 #' @param plot_out Reactive. Plot to display in tab.
 #' @param table_out Reactive. Table to display in tab.
-#' @inheritParams prepare_tt_data
+#' @inheritParams produce_tt_data
 #' @inheritParams plotOutput_h
 #' @param tt_content Optional.
 #' @importFrom DT renderDataTable
@@ -28,13 +28,13 @@ tabsetPanel_SERVER <- function(id, plot_out, table_out,
     output[["tooltip"]] <- renderUI({
       hv = input[["hover"]]
       if(!is.null(hv)) {
-        generate_tooltip(hv, plot_out, plot_type, tt_content)
+        spark_tooltip(hv, plot_out, plot_type, tt_content)
       }
     })
 
-    output[["download_png"]] <- generate_downloadButton(id, plot_out, "png")
-    output[["download_jpeg"]] <- generate_downloadButton(id, plot_out, "jpeg")
-    output[["download_svg"]] <- generate_downloadButton(id, plot_out, "svg")
+    output[["download_png"]] <- spark_downloadButton(id, plot_out, "png")
+    output[["download_jpeg"]] <- spark_downloadButton(id, plot_out, "jpeg")
+    output[["download_svg"]] <- spark_downloadButton(id, plot_out, "svg")
 
     output[["data"]] <- DT::renderDataTable(server = FALSE, {
       dt_format(table_out())
