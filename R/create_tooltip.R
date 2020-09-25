@@ -2,7 +2,7 @@
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
-#' @param plot_out Reactive. Plot to extract data from.
+#' @param plot_obj Plot to extract data from.
 #' @param plot_type Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 #' or \code{'geom_col'}. Default \code{'geom_point'}.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
@@ -11,10 +11,10 @@
 #' @export
 
 
-produce_tt_data <- function(hv, plot_out, plot_type = "geom_point") {
+produce_tt_data <- function(hv, plot_obj, plot_type = "geom_point") {
 
-  plot_data <- as.data.frame(plot_out()[["data"]])
-  plot_data_info <- ggplot_build(plot_out())[["data"]][[1]]
+  plot_data <- as.data.frame(plot_obj[["data"]])
+  plot_data_info <- ggplot_build(plot_obj)[["data"]][[1]]
 
   switch(plot_type,
          geom_col = {
@@ -55,9 +55,9 @@ produce_tt_data <- function(hv, plot_out, plot_type = "geom_point") {
 #' @export
 #'
 
-spark_tooltip <- function(hv, plot_out, plot_type, tt_content) {
+spark_tooltip <- function(hv, plot_obj, plot_type, tt_content) {
 
-  tt_df <- produce_tt_data(hv, plot_out, plot_type)
+  tt_df <- produce_tt_data(hv, plot_obj, plot_type)
 
   if(nrow(tt_df) != 0) {
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,
