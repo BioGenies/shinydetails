@@ -19,13 +19,13 @@ produce_tt_data <- function(hv, plot_obj, plot_type = "geom_point") {
   switch(plot_type,
          geom_col = {
            hv_data <- data.frame(x = hv[["x"]],
-                                y = hv[["y"]],
-                                xmin = plot_data_info[["xmin"]],
-                                xmax = plot_data_info[["xmax"]],
-                                plot_data)
+                                 y = hv[["y"]],
+                                 xmin = plot_data_info[["xmin"]],
+                                 xmax = plot_data_info[["xmax"]],
+                                 plot_data)
            tt_df <- hv_data[hv_data[["x"]] < hv_data[["xmax"]] &
                               hv_data[["x"]] >= hv_data[["xmin"]],
-                           !(colnames(hv_data) %in% c("x", "y", "xmax", "xmin"))]
+                            !(colnames(hv_data) %in% c("x", "y", "xmax", "xmin"))]
          },
          geom_point = {
            tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
@@ -35,12 +35,17 @@ produce_tt_data <- function(hv, plot_obj, plot_type = "geom_point") {
                                  y = hv[["y"]],
                                  x_start = plot_data[[hv[["mapping"]][["x"]]]],
                                  x_end = plot_data[[hv[["mapping"]][["xend"]]]],
-                                 y_plot = plot_data[[hv[["mapping"]][["y"]]]],
+                                 y_start = plot_data[[hv[["mapping"]][["y"]]]],
+                                 y_end = plot_data[[hv[["mapping"]][["yend"]]]],
+                                 x_middle = (plot_data[[hv[["mapping"]][["x"]]]] + plot_data[[hv[["mapping"]][["xend"]]]])/2,
+                                 y_middle = (plot_data[[hv[["mapping"]][["y"]]]] + plot_data[[hv[["mapping"]][["yend"]]]])/2,
                                  plot_data)
-           tt_df <- hv_data[hv_data[["x"]] > hv_data[["x_start"]] &
-                              hv_data[["x"]] < hv_data[["x_end"]] &
-                              abs(hv_data[["y_plot"]] - hv_data[["y"]]) < 10 &
-                              abs(hv_data[["y_plot"]] - hv_data[["y"]]) == min(abs(hv_data[["y_plot"]] - hv_data[["y"]])),
+           tt_df <- hv_data[hv_data[["x"]] >= hv_data[["x_start"]] - 10 &
+                              hv_data[["x"]] <= hv_data[["x_end"]] + 10 &
+                              hv_data[["y"]] >= hv_data[["y_start"]] - 10 &
+                              hv_data[["y"]] <= hv_data[["y_end"]] + 10 &
+                              sqrt((hv_data[["x_middle"]] - hv_data[["x"]])^2 + (hv_data[["y_middle"]] - hv_data[["y"]])^2) ==
+                              min(sqrt((hv_data[["x_middle"]] - hv_data[["x"]])^2 + (hv_data[["y_middle"]] - hv_data[["y"]])^2)),
                             !(colnames(hv_data) %in% c("x", "y"))]
          }
   )
@@ -75,8 +80,8 @@ spark_tooltip <- function(hv, plot_obj, plot_type, tt_content) {
       content <- paste(colnames(tt_df), ": ", t(tt_df ), c(rep("<br/>", ncol(tt_df)-1), ""))
     }else {
       text <- paste(tt_content[["row_text"]],
-                   c(rep(" <br/> ", length(tt_content[["row_text"]]) - 1), ""),
-                   sep = "", collapse = "")
+                    c(rep(" <br/> ", length(tt_content[["row_text"]]) - 1), ""),
+                    sep = "", collapse = "")
       content <- do.call(sprintf, c(list(text), lapply(tt_content[["chosen_cols"]], function(i) tt_df[[i]])))
     }
 
