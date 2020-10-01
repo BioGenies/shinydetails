@@ -4,12 +4,12 @@
 \alias{produce_tt_data}
 \title{Tooltip data}
 \usage{
-produce_tt_data(hv, plot_out, plot_type = "geom_point")
+produce_tt_data(hv, plot_obj, plot_type = "geom_point", tt_range)
 }
 \arguments{
 \item{hv}{Hoover.}
 
-\item{plot_out}{Reactive. Plot to extract data from.}
+\item{plot_obj}{Plot to extract data from.}
 
 \item{plot_type}{Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}

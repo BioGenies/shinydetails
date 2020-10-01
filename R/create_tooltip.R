@@ -2,7 +2,8 @@
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
-#' @param plot_obj Plot to extract data from.
+#' @param plot_obj Plot ...
+#' @param plot_data Data ...
 #' @param plot_type Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 #' or \code{'geom_col'}. Default \code{'geom_point'}.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
@@ -11,10 +12,15 @@
 #' @export
 
 
-produce_tt_data <- function(hv, plot_obj, plot_type = "geom_point") {
+produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", tt_range) {
 
-  plot_data <- as.data.frame(plot_obj[["data"]])
-  plot_data_info <- ggplot_build(plot_obj)[["data"]][[1]]
+  plot_data_info <- ggplot_build(plot_obj)[["data"]]
+
+  if(length(plot_data_info) == 2) {
+    plot_data_info <- plot_data_info[[2]]
+  }else {
+    plot_data_info <- plot_data_info[[1]]
+  }
 
   switch(plot_type,
          geom_col = {
@@ -28,25 +34,27 @@ produce_tt_data <- function(hv, plot_obj, plot_type = "geom_point") {
                             !(colnames(hv_data) %in% c("x", "y", "xmax", "xmin"))]
          },
          geom_point = {
-           tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1)
+           tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1, threshold = tt_range)
          },
          geom_segment = {
-           hv_data <- data.frame(x = hv[["x"]],
-                                 y = hv[["y"]],
-                                 x_start = plot_data[[hv[["mapping"]][["x"]]]],
-                                 x_end = plot_data[[hv[["mapping"]][["xend"]]]],
-                                 y_start = plot_data[[hv[["mapping"]][["y"]]]],
-                                 y_end = plot_data[[hv[["mapping"]][["yend"]]]],
-                                 x_middle = (plot_data[[hv[["mapping"]][["x"]]]] + plot_data[[hv[["mapping"]][["xend"]]]])/2,
-                                 y_middle = (plot_data[[hv[["mapping"]][["y"]]]] + plot_data[[hv[["mapping"]][["yend"]]]])/2,
+           x_start <- plot_data_info[["x"]]
+           x_end <- plot_data_info[["xend"]]
+           y_start <- plot_data_info[["y"]]
+           y_end <- plot_data_info[["yend"]]
+           A <- y_start - y_end
+           B <- x_end - x_start
+           C <- y_end*(x_start - x_end) - x_end*(y_start - y_end)
+
+           hv_data <- data.frame(dist = abs((hv[["x"]]*A +  hv[["y"]]*B + C))/sqrt(A^2 + B^2),
                                  plot_data)
-           tt_df <- hv_data[hv_data[["x"]] >= hv_data[["x_start"]] - 10 &
-                              hv_data[["x"]] <= hv_data[["x_end"]] + 10 &
-                              hv_data[["y"]] >= hv_data[["y_start"]] - 10 &
-                              hv_data[["y"]] <= hv_data[["y_end"]] + 10 &
-                              sqrt((hv_data[["x_middle"]] - hv_data[["x"]])^2 + (hv_data[["y_middle"]] - hv_data[["y"]])^2) ==
-                              min(sqrt((hv_data[["x_middle"]] - hv_data[["x"]])^2 + (hv_data[["y_middle"]] - hv_data[["y"]])^2)),
-                            !(colnames(hv_data) %in% c("x", "y"))]
+
+           tt_df <- hv_data[x_start - tt_range <= hv[["x"]] &
+                              x_end + tt_range >= hv[["x"]] &
+                              y_start - tt_range <= hv[["y"]] &
+                              y_end + tt_range >= hv[["y"]] &
+                              hv_data[["dist"]] <= tt_range &
+                              hv_data[["dist"]] == min(hv_data[["dist"]]),
+                            !(colnames(hv_data) %in% c("dist"))]
          }
   )
   tt_df
@@ -60,9 +68,9 @@ produce_tt_data <- function(hv, plot_obj, plot_type = "geom_point") {
 #' @export
 #'
 
-spark_tooltip <- function(hv, plot_obj, plot_type, tt_content) {
+spark_tooltip <- function(hv, plot_obj, plot_data, plot_type, tt_content, tt_range) {
 
-  tt_df <- produce_tt_data(hv, plot_obj, plot_type)
+  tt_df <- produce_tt_data(hv, plot_obj, plot_data, plot_type, tt_range)
 
   if(nrow(tt_df) != 0) {
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,

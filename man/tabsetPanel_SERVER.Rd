@@ -10,6 +10,7 @@ tabsetPanel_SERVER(
   table_out,
   plot_type = "point",
   tt_content = NULL,
+  tt_range = 5,
   helpfiles = "helpfiles"
 )
 }
@@ -24,6 +25,8 @@ tabsetPanel_SERVER(
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_content}{Optional.}
+
+\item{tt_range}{An extra range for tooltip. Default \code{5}.}
 
 \item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
 }

@@ -4,12 +4,12 @@
 \alias{spark_tooltip}
 \title{Generate tooltip}
 \usage{
-spark_tooltip(hv, plot_out, plot_type, tt_content)
+spark_tooltip(hv, plot_obj, plot_type, tt_content, tt_range)
 }
 \arguments{
 \item{hv}{Hoover.}
 
-\item{plot_out}{Reactive. Plot to extract data from.}
+\item{plot_obj}{Plot to extract data from.}
 
 \item{plot_type}{Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}

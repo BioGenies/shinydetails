@@ -7,12 +7,17 @@
 #' @inheritParams produce_tt_data
 #' @inheritParams plotOutput_h
 #' @param tt_content Optional.
+#' @param tt_range An extra range for tooltip. Default \code{5}.
 #' @importFrom DT renderDataTable
 #' @export
 
 
-tabsetPanel_SERVER <- function(id, plot_out, table_out,
-                               plot_type = "point", tt_content = NULL,
+tabsetPanel_SERVER <- function(id,
+                               plot_out,
+                               table_out,
+                               plot_type = "point",
+                               tt_content = NULL,
+                               tt_range = 5,
                                helpfiles = "helpfiles") {
 
   if(!(plot_type %in% c("geom_col", "geom_point", "geom_segment")))
@@ -28,7 +33,7 @@ tabsetPanel_SERVER <- function(id, plot_out, table_out,
     output[["tooltip"]] <- renderUI({
       hv = input[["hover"]]
       if(!is.null(hv)) {
-        spark_tooltip(hv, plot_out, plot_type, tt_content)
+        spark_tooltip(hv, plot_out(), table_out(), plot_type, tt_content, tt_range)
       }
     })
 

@@ -8,7 +8,7 @@ shinyServer(function(input, output) {
   observe_helpers(session = getDefaultReactiveDomain(), help_dir = "helpfiles")
 
   #comparison plot and data
-  prepared_comparison_dat <- prepare_data(input, "comparison")
+  prepared_comparison_dat <- produce_HaDeX_data(input, "comparison")
 
   comparison_data <- reactive({
     generate_comparison_data(prepared_comparison_dat,
@@ -23,7 +23,7 @@ shinyServer(function(input, output) {
   })
 
   #differential plot and data
-  prepared_differential_dat <- prepare_data(input, "differential")
+  prepared_differential_dat <- produce_HaDeX_data(input, "differential")
 
   differential_data <- reactive({
     generate_differential_data(prepared_differential_dat,
@@ -43,7 +43,7 @@ shinyServer(function(input, output) {
 
 
   #bar plot and data
-  prepated_distribution_dat <- prepare_data(input, "bar")
+  prepated_distribution_dat <- produce_HaDeX_data(input, "bar")
 
   bar_data <- reactive({
     prepated_distribution_dat
