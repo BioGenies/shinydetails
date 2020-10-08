@@ -31,7 +31,7 @@ plotOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
 tableOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
   create_help_files(files = outputId,
                     help_dir = "helpfiles")
-  helper(dataTableOutput(outputId, ...),
+  helper(DT::dataTableOutput(outputId, ...),
          content = outputId,
          type = "markdown")
 }
