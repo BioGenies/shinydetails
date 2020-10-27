@@ -2,17 +2,19 @@
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
-#' @param plot_obj Plot ...
-#' @param plot_data Data ...
+#' @param plot_obj ggplot object
+#' @param plot_data data on which the ggplot is based
 #' @param plot_type Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 #' or \code{'geom_col'}. Default \code{'geom_point'}.
+#' @param tt_range A number denoting maximum distance between hoover and objects on the plot.
+#' The row, whose distance to the hoover is less than \code{tt_range} will be selected from the whole data. Default 5.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
 #' @details This function filters one row of the imputed data in order that it
 #' coresponds the most to the hoover coordinates.
 #' @export
 
 
-produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", tt_range) {
+produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", tt_range = 5) {
 
   plot_data_info <- ggplot_build(plot_obj)[["data"]]
 
@@ -68,7 +70,7 @@ produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", t
 #' @export
 #'
 
-spark_tooltip <- function(hv, plot_obj, plot_data, plot_type, tt_content, tt_range) {
+beam_tooltip <- function(hv, plot_obj, plot_data, plot_type, tt_content, tt_range = 5) {
 
   tt_df <- produce_tt_data(hv, plot_obj, plot_data, plot_type, tt_range)
 
