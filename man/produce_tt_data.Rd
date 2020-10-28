@@ -33,5 +33,5 @@ Prepares data in order that it may be displayed in tooltip.
 }
 \details{
 This function filters one row of the imputed data in order that it
-coresponds the most to the hoover coordinates.
+corresponds the most to the hoover coordinates.
 }

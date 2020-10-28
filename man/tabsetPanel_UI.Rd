@@ -24,7 +24,7 @@ tabsetPanel_UI(
 }
 \description{
 Creates module ui for tabset panel. It contains two tabs - with
-plot and an elegenat table with respective data.
+plot and an elegant table with respective data.
 }
 \details{
 \code{tabsetPanel_UI} provides three download buttons (png, svg and jpeg)
