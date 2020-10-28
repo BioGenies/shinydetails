@@ -2,7 +2,7 @@ Package: shinydetails
 Type: Package
 Title: A collection of useful components for Shiny apps
 Version: 0.1.0
-Author: c(person("Krystyna", "Grzesiak", 
+Authors@R: c(person("Krystyna", "Grzesiak", 
           email = "krygrz11@gmail.com",
           comment = c(ORCID = "0000-0003-2581-7722"),
           role = c("cre", "aut")),
