@@ -8,7 +8,7 @@
 #' or \code{'geom_col'}. Default \code{'geom_point'}.
 #' @return \code{prepare_tt_data} returns prepared data frame containing one record.
 #' @details This function filters one row of the imputed data in order that it
-#' coresponds the most to the hoover coordinates.
+#' corresponds the most to the hoover coordinates.
 #' @export
 
 

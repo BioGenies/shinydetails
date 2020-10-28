@@ -1,7 +1,7 @@
 
 #' @title  UI for tabset panel.
 #' @description  Creates module ui for tabset panel. It contains two tabs - with
-#' plot and an elegenat table with respective data.
+#' plot and an elegant table with respective data.
 #' @param id Id name of tabset panel.
 #' @param tab_plot Character. Title of tab containing plot. Default to
 #' \code{paste(id, "plot")}.
