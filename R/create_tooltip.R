@@ -2,7 +2,7 @@
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
-#' @param plot_obj ggplot object
+#' @param plot_info \code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.
 #' @param plot_data data on which the ggplot is based
 #' @param plot_type Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 #' or \code{'geom_col'}. Default \code{'geom_point'}.
@@ -14,22 +14,21 @@
 #' @export
 
 
-produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", tt_range = 5) {
+produce_tt_data <- function(hv, plot_info, plot_data, plot_type = "geom_point", tt_range = 5) {
 
-  plot_data_info <- ggplot_build(plot_obj)[["data"]]
 
-  if(length(plot_data_info) == 2) {
-    plot_data_info <- plot_data_info[[2]]
+  if(length(plot_info) == 2) {
+    plot_info <- plot_info[[2]]
   }else {
-    plot_data_info <- plot_data_info[[1]]
+    plot_info <- plot_info[[1]]
   }
 
   switch(plot_type,
          geom_col = {
            hv_data <- data.frame(x = hv[["x"]],
                                  y = hv[["y"]],
-                                 xmin = plot_data_info[["xmin"]],
-                                 xmax = plot_data_info[["xmax"]],
+                                 xmin = plot_info[["xmin"]],
+                                 xmax = plot_info[["xmax"]],
                                  plot_data)
            tt_df <- hv_data[hv_data[["x"]] < hv_data[["xmax"]] &
                               hv_data[["x"]] >= hv_data[["xmin"]],
@@ -39,10 +38,10 @@ produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", t
            tt_df <- nearPoints(df = plot_data, coordinfo = hv, maxpoints = 1, threshold = tt_range)
          },
          geom_segment = {
-           x_start <- plot_data_info[["x"]]
-           x_end <- plot_data_info[["xend"]]
-           y_start <- plot_data_info[["y"]]
-           y_end <- plot_data_info[["yend"]]
+           x_start <- plot_info[["x"]]
+           x_end <- plot_info[["xend"]]
+           y_start <- plot_info[["y"]]
+           y_end <- plot_info[["yend"]]
            A <- y_start - y_end
            B <- x_end - x_start
            C <- y_end*(x_start - x_end) - x_end*(y_start - y_end)
@@ -70,9 +69,9 @@ produce_tt_data <- function(hv, plot_obj, plot_data, plot_type = "geom_point", t
 #' @export
 #'
 
-beam_tooltip <- function(hv, plot_obj, plot_data, plot_type, tt_content, tt_range = 5) {
+beam_tooltip <- function(hv, plot_info, plot_data, plot_type, tt_content, tt_range = 5) {
 
-  tt_df <- produce_tt_data(hv, plot_obj, plot_data, plot_type, tt_range)
+  tt_df <- produce_tt_data(hv, plot_info, plot_data, plot_type, tt_range)
 
   if(nrow(tt_df) != 0) {
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,

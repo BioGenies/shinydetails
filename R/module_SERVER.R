@@ -29,10 +29,12 @@ tabsetPanel_SERVER <- function(id,
 
     output[["plot"]] <- renderPlot({plot_out()})
 
+    plot_info <- reactive({ggplot_build(plot_out())[["data"]]})
+
     output[["tooltip"]] <- renderUI({
       hv = input[["hover"]]
       if(!is.null(hv)) {
-        beam_tooltip(hv, plot_out(), table_out(), plot_type, tt_content, tt_range)
+        beam_tooltip(hv, plot_info(), table_out(), plot_type, tt_content, tt_range)
       }
     })
 

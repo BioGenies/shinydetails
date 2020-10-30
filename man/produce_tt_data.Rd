@@ -6,7 +6,7 @@
 \usage{
 produce_tt_data(
   hv,
-  plot_obj,
+  plot_info,
   plot_data,
   plot_type = "geom_point",
   tt_range = 5
@@ -15,7 +15,7 @@ produce_tt_data(
 \arguments{
 \item{hv}{Hoover.}
 
-\item{plot_obj}{ggplot object}
+\item{plot_info}{\code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.}
 
 \item{plot_data}{data on which the ggplot is based}
 

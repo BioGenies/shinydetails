@@ -4,12 +4,12 @@
 \alias{beam_tooltip}
 \title{Generate tooltip}
 \usage{
-beam_tooltip(hv, plot_obj, plot_data, plot_type, tt_content, tt_range = 5)
+beam_tooltip(hv, plot_info, plot_data, plot_type, tt_content, tt_range = 5)
 }
 \arguments{
 \item{hv}{Hoover.}
 
-\item{plot_obj}{ggplot object}
+\item{plot_info}{\code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.}
 
 \item{plot_data}{data on which the ggplot is based}
 
