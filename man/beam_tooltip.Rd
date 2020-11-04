@@ -9,11 +9,11 @@ beam_tooltip(hv, plot_info, plot_data, plot_type, tt_content, tt_range = 5)
 \arguments{
 \item{hv}{Hoover.}
 
-\item{plot_info}{\code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.}
+\item{plot_info}{chosen mapping from the \code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.}
 
 \item{plot_data}{data on which the ggplot is based}
 
-\item{plot_type}{Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+\item{plot_type}{Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_content}{Content}

@@ -7,6 +7,7 @@
 #' @importFrom ggplot2 ggplot_build
 #' @importFrom ggplot2 ggsave
 #' @importFrom shiny tabsetPanel
+#' @importFrom shiny reactive
 #' @importFrom shiny tabPanel
 #' @importFrom shiny tagList
 #' @importFrom shiny downloadButton

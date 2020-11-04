@@ -2,9 +2,9 @@
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
 #' @param hv Hoover.
-#' @param plot_info \code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.
+#' @param plot_info chosen mapping from the \code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.
 #' @param plot_data data on which the ggplot is based
-#' @param plot_type Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+#' @param plot_type Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 #' or \code{'geom_col'}. Default \code{'geom_point'}.
 #' @param tt_range A number denoting maximum distance between hoover and objects on the plot.
 #' The row, whose distance to the hoover is less than \code{tt_range} will be selected from the whole data. Default 5.
@@ -15,13 +15,6 @@
 
 
 produce_tt_data <- function(hv, plot_info, plot_data, plot_type = "geom_point", tt_range = 5) {
-
-
-  if(length(plot_info) == 2) {
-    plot_info <- plot_info[[2]]
-  }else {
-    plot_info <- plot_info[[1]]
-  }
 
   switch(plot_type,
          geom_col = {

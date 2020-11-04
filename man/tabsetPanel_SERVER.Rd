@@ -17,11 +17,11 @@ tabsetPanel_SERVER(
 \arguments{
 \item{id}{Id of tabset panel.}
 
-\item{plot_out}{Reactive. Plot to display in tab.}
+\item{plot_out}{Reactive. Plot to display in tab. The items from first mapping will be connected with tooltip.}
 
 \item{table_out}{Reactive. Table to display in tab.}
 
-\item{plot_type}{Type of plot. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+\item{plot_type}{Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_content}{Optional.}

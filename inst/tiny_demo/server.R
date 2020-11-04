@@ -13,13 +13,13 @@ server <- shinyServer(function(input, output) {
   })
 
   geom_segment_plot_out <- reactive({
-    ggplot() +
+    ggplot(geom_segment_data(), mapping = aes(y = 0,
+                                              x = car,
+                                              yend = mpg,
+                                              xend = car)) +
+      geom_segment(color = "black") +
       geom_point(stat ='identity', fill="black")  +
-      geom_segment(geom_segment_data(), mapping = aes(y = 0,
-                                                      x = car,
-                                                      yend = mpg,
-                                                      xend = car),
-                   color = "black")
+      coord_flip()
   })
 
   tabsetPanel_SERVER(id = "geom_segment",
