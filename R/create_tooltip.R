@@ -1,6 +1,7 @@
 
 #' @title Tooltip data
 #' @description  Prepares data in order that it may be displayed in tooltip.
+#' The row from the data which fits to the hover the most will be selected.
 #' @param hv Hoover.
 #' @param plot_info chosen mapping from the \code{data} object from the output of \code{\link[ggplot2]{ggplot_build}} for displayed plot.
 #' @param plot_data data on which the ggplot is based
@@ -14,7 +15,7 @@
 #' @export
 
 
-produce_tt_data <- function(hv, plot_info, plot_data, plot_type = "geom_point", tt_range = 5) {
+extract_tt_data_row <- function(hv, plot_info, plot_data, plot_type = "geom_point", tt_range = 5) {
 
   switch(plot_type,
          geom_col = {
@@ -57,14 +58,14 @@ produce_tt_data <- function(hv, plot_info, plot_data, plot_type = "geom_point", 
 
 #' @title Generate tooltip
 #' @description  Generates tooltip .
-#' @inheritParams produce_tt_data
+#' @inheritParams extract_tt_data_row
 #' @param tt_content Content
 #' @export
 #'
 
 beam_tooltip <- function(hv, plot_info, plot_data, plot_type, tt_content, tt_range = 5) {
 
-  tt_df <- produce_tt_data(hv, plot_info, plot_data, plot_type, tt_range)
+  tt_df <- extract_tt_data_row(hv, plot_info, plot_data, plot_type, tt_range)
 
   if(nrow(tt_df) != 0) {
     tt_pos_adj <- ifelse(hv[["coords_img"]][["x"]]/hv[["range"]][["right"]] < 0.5,

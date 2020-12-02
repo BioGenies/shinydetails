@@ -26,7 +26,7 @@ flip_ggplot_build <- function(ggplot_build_data){
 #' @param id Id of tabset panel.
 #' @param plot_out Reactive. Plot to display in tab. The items from first mapping will be connected with tooltip.
 #' @param table_out Reactive. Table to display in tab.
-#' @inheritParams produce_tt_data
+#' @inheritParams extract_tt_data_row
 #' @inheritParams plotOutput_h
 #' @param tt_content Optional.
 #' @importFrom DT renderDataTable
