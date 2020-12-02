@@ -6,17 +6,20 @@
 #' @export
 
 flip_ggplot_build <- function(ggplot_build_data){
-  ggplot_build_data_names <- colnames(ggplot_build_data)
-  names(ggplot_build_data) <- sapply(ggplot_build_data_names, function(name) {
-    switch(substr(name, 1, 1),
-           x = {
-             substr(name, 1, 1) = "y"
-           },
-           y = {
-             substr(name, 1, 1) = "x"
-           })
-    name
-  })
+
+  if("CoordFlip" %in% class(ggplot_build_data$plot$coordinates)) {
+    ggplot_build_data_names <- colnames(ggplot_build_data)
+    names(ggplot_build_data) <- sapply(ggplot_build_data_names, function(name) {
+      switch(substr(name, 1, 1),
+             x = {
+               substr(name, 1, 1) = "y"
+             },
+             y = {
+               substr(name, 1, 1) = "x"
+             })
+      name
+    })
+  }
   ggplot_build_data
 }
 
@@ -53,14 +56,7 @@ tabsetPanel_SERVER <- function(id,
 
     plot_info_data <- reactive({
       plot_info <- ggplot_build(plot_out())
-      plot_info_data <- NULL
-
-      if("CoordFlip" %in% class(plot_info$plot$coordinates)) {
-        plot_info_data <- flip_ggplot_build(plot_info[["data"]][[1]])
-      }else {
-        plot_info_data <- plot_info[["data"]][[1]]
-      }
-      plot_info_data
+      plot_info_data <- flip_ggplot_build(plot_info[["data"]][[1]])
     })
 
     output[["tooltip"]] <- renderUI({
