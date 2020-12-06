@@ -17,6 +17,8 @@
 
 extract_tt_data_row <- function(hv, plot_info, plot_data, plot_type = "geom_point", tt_range = 5) {
 
+  match.arg(plot_type,  c("geom_col", "geom_point", "geom_segment"), several.ok = FALSE)
+
   switch(plot_type,
          geom_col = {
            hv_data <- data.frame(x = hv[["x"]],

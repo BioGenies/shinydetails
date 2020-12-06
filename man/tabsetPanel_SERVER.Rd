@@ -8,7 +8,7 @@ tabsetPanel_SERVER(
   id,
   plot_out,
   table_out,
-  plot_type = "point",
+  plot_type = "geom_point",
   tt_content = NULL,
   tt_range = 5,
   helpfiles = "helpfiles"

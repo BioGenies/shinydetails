@@ -39,13 +39,12 @@ flip_ggplot_build <- function(ggplot_build_data){
 tabsetPanel_SERVER <- function(id,
                                plot_out,
                                table_out,
-                               plot_type = "point",
+                               plot_type = "geom_point",
                                tt_content = NULL,
                                tt_range = 5,
                                helpfiles = "helpfiles") {
 
-  if(!(plot_type %in% c("geom_col", "geom_point", "geom_segment")))
-    stop("plot_type must be either geom_col, geom_segment or geom_point.")
+  match.arg(plot_type,  c("geom_col", "geom_point", "geom_segment"), several.ok = FALSE)
 
   moduleServer(id, function(input, output, session) {
 
