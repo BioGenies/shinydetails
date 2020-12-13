@@ -9,8 +9,8 @@
 #'
 
 sliderInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
-  create_help_files(files = inputId,
-                    help_dir = helpfiles)
+  suppressMessages({create_help_files_custom(files = inputId,
+                                             help_dir = helpfiles)})
   helper(sliderInput(inputId, ...),
          content = inputId,
          type = "markdown")
@@ -27,8 +27,8 @@ sliderInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
 #'
 
 numericInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
-  create_help_files(files = inputId,
-                    help_dir = helpfiles)
+  suppressMessages({create_help_files_custom(files = inputId,
+                                             help_dir = helpfiles)})
   helper(numericInput(inputId, ...),
          content = inputId,
          type = "markdown")
@@ -46,8 +46,9 @@ numericInput_h <- function(inputId, helpfiles = "helpfiles", ...) {
 #'
 
 plotOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
-  create_help_files(files = outputId,
-                    help_dir = "helpfiles")
+  suppressMessages({create_help_files_custom(files = outputId,
+                                             help_dir = "helpfiles",
+                                             content = "This help file was generated automatically.")})
   helper(plotOutput(outputId, ...),
          content = outputId,
          type = "markdown")
@@ -65,8 +66,9 @@ plotOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
 
 
 tableOutput_h <- function(outputId, helpfiles = "helpfiles", ...) {
-  create_help_files(files = outputId,
-                    help_dir = "helpfiles")
+  suppressMessages({create_help_files_custom(files = outputId,
+                                             help_dir = "helpfiles",
+                                             content = "This help file was generated automatically.")})
   helper(DT::dataTableOutput(outputId, ...),
          content = outputId,
          type = "markdown")

@@ -2,5 +2,7 @@
 
 ***
 
-This helpfile is under not finished yet
+
+This help file was generated automatically.
+
 
