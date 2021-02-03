@@ -1,11 +1,11 @@
-#' @title Download button
-#' @description  Generates download button.
-#' @param id Id name of tabset panel.
-#' @param plot_out lot to save.
-#' @param device Parameter from \code{\link[ggplot2]{ggsave}}.
+#' @title Download button for plot
+#' @description  Generates download button for a plot with dimensions of 300x400mm.
+#' @param id Unique id of download button.
+#' @param plot_out Plot to save.
+#' @inheritParams ggplot2::ggsave
 #' @return \code{generate_downloadButton} returns the output of \code{downloadHandler}
 #' for given plot and device.
-#' @details This function uses \code{\link[shiny]{downloadHandler}}.
+#' @details This function uses \code{\link[shiny]{downloadHandler}} and \code{\link[ggplot2]{ggsave}}.
 #' @export
 #' @importFrom ggplot2 ggsave
 

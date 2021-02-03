@@ -9,14 +9,20 @@ numericInput_h(inputId, helpfiles = "helpfiles", ...)
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
 
-\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
+\item{helpfiles}{A character string denoting directory to save empty help files.
+Default \code{'helpfiles'}.}
 
 \item{...}{Optional arguments for \code{numericInput}.}
 }
 \description{
 Constructs a numeric input with helper.
-Same as \code{helper(numericInput(outputId, ...))}
+Same as \code{helper(numericInput(outputId, ...))}. Creates help file and/or
+directory if it does not exist.
 }
 \details{
 This function uses \code{\link[shinyhelper]{helper}}.
+}
+\seealso{
+For more elements with helpers see \code{\link[shinydetails]{plotOutput_h}},
+\code{\link[shinydetails]{tableOutput_h}}, \code{\link[shinydetails]{sliderInput_h}}
 }

@@ -2,14 +2,16 @@
 #' @title Table widget
 #' @description  \code{dt_format} is a function for creating a graphical
 #' widget containing a table with download buttons (Excel and CSV).
-#' @param dat Dataset. A matrix or data frame.
-#' @param cols Names of columns to display.
+#' @param dat a data object - a matrix or a data frame.
+#' @param colnames Names of columns to display in the table. By default it is
+#' equal to the names of the columns from the \code{dat}. Parameter \code{colnames} is
+#' correspond the argument \code{colnames} from \code{\link[DT]{datatable}}.
 #' @details This function uses \code{\link[DT]{datatable}}.
 #'
 
-dt_format <- function(dat, cols = colnames(dat)) {
+dt_format <- function(dat, colnames = colnames(dat)) {
   datatable(data = dat,
-            colnames = cols,
+            colnames = colnames,
             class = "table-bordered table-condensed",
             extensions = "Buttons",
             options = list(pageLength = 10,
@@ -21,25 +23,36 @@ dt_format <- function(dat, cols = colnames(dat)) {
 }
 
 
-#' @title  Supplementary function for ggplot_build
-#' @description  Changes ggplot_build \code{data} output in order to make it
-#' compatible with the plot when coordinates are flipped.
-#' @param ggplot_build_data Element \code{data} from the output of \code{\link[ggplot2]{ggplot_build}}.
+#' @title Ggplot_build for flipped plots
+#' @description  \code{flip_ggplot_build} is a supplementary function for ggplot_build.
+#' Changes ggplot_build output in order to make it compatible with the
+#' plot when coordinates are flipped.
+#' @param ggplot_build_data output of \code{\link[ggplot2]{ggplot_build}}
+#' @details \code{data} from the output of \code{\link[ggplot2]{ggplot_build}} has
+#' names of columns compatible with the mapping. In case when coordinates are flipped,
+#' it is not consistent with the displayed plot. \code{flip_ggplot_build} changes
+#' the names so that coordinates from the output of  \code{\link[ggplot2]{ggplot_build}}
+#' are compatible with the plot and returns it. In case when coordinates are not flipped
+#' \code{flip_ggplot_build} returns \code{ggplot_build_data}.
 #' @export
 
 flip_ggplot_build <- function(ggplot_build_data){
 
   if("CoordFlip" %in% class(ggplot_build_data$plot$coordinates)) {
-    ggplot_build_data_names <- colnames(ggplot_build_data)
-    names(ggplot_build_data) <- sapply(ggplot_build_data_names, function(name) {
-      switch(substr(name, 1, 1),
-             x = {
-               substr(name, 1, 1) = "y"
-             },
-             y = {
-               substr(name, 1, 1) = "x"
-             })
-      name
+
+    ggplot_build_data[["data"]] <- lapply(ggplot_build_data[["data"]], function(df) {
+      df_names <- colnames(df)
+      names(df) <- sapply(df_names, function(name) {
+        switch(substr(name, 1, 1),
+               x = {
+                 substr(name, 1, 1) = "y"
+               },
+               y = {
+                 substr(name, 1, 1) = "x"
+               })
+        name
+      })
+      df
     })
   }
   ggplot_build_data
@@ -95,12 +108,12 @@ beam_plot_panel_UI <- function(id,
 
 
 beam_plot_panel_SERVER <- function(id,
-                               plot_out,
-                               table_out,
-                               plot_type = "geom_point",
-                               tt_content = NULL,
-                               tt_range = 5,
-                               helpfiles = "helpfiles") {
+                                   plot_out,
+                                   table_out,
+                                   plot_type = "geom_point",
+                                   tt_content = NULL,
+                                   tt_range = 5,
+                                   helpfiles = "helpfiles") {
 
   match.arg(plot_type, c("geom_col", "geom_point", "geom_segment"), several.ok = FALSE)
 
@@ -113,7 +126,7 @@ beam_plot_panel_SERVER <- function(id,
 
     plot_info_data <- reactive({
       plot_info <- ggplot_build(plot_out)
-      flip_ggplot_build(plot_info[["data"]][[1]])
+      flip_ggplot_build(plot_info)[["data"]][[1]]
     })
 
     output[["tooltip"]] <- renderUI({

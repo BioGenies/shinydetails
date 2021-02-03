@@ -2,7 +2,7 @@
 % Please edit documentation in R/custom_help_files.R
 \name{create_help_files_custom}
 \alias{create_help_files_custom}
-\title{Custom help files}
+\title{Creating new help file}
 \usage{
 create_help_files_custom(
   files,
@@ -18,8 +18,10 @@ create_help_files_custom(
 \item{content}{A character string to display in the automatically created help file.}
 }
 \description{
-This function creates help files with custom content.
+This function creates help file (unless it already exists) with
+custom content.
 }
 \details{
-This function is based on \code{\link[shinyhelper]{create_help_files}}.
+This function is based on \code{\link[shinyhelper]{create_help_files}} a lot.
+The option for providing custom \code{content} is the only improvement.
 }

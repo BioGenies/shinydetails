@@ -2,14 +2,23 @@
 % Please edit documentation in R/plot_panel.R
 \name{flip_ggplot_build}
 \alias{flip_ggplot_build}
-\title{Supplementary function for ggplot_build}
+\title{Ggplot_build for flipped plots}
 \usage{
 flip_ggplot_build(ggplot_build_data)
 }
 \arguments{
-\item{ggplot_build_data}{Element \code{data} from the output of \code{\link[ggplot2]{ggplot_build}}.}
+\item{ggplot_build_data}{output of \code{\link[ggplot2]{ggplot_build}}}
 }
 \description{
-Changes ggplot_build \code{data} output in order to make it
-compatible with the plot when coordinates are flipped.
+\code{flip_ggplot_build} is a supplementary function for ggplot_build.
+Changes ggplot_build output in order to make it compatible with the
+plot when coordinates are flipped.
+}
+\details{
+\code{data} from the output of \code{\link[ggplot2]{ggplot_build}} has
+names of columns compatible with the mapping. In case when coordinates are flipped,
+it is not consistent with the displayed plot. \code{flip_ggplot_build} changes
+the names so that coordinates from the output of  \code{\link[ggplot2]{ggplot_build}}
+are compatible with the plot and returns it. In case when coordinates are not flipped
+\code{flip_ggplot_build} returns \code{ggplot_build_data}.
 }

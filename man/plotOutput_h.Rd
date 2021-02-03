@@ -9,14 +9,21 @@ plotOutput_h(outputId, helpfiles = "helpfiles", ...)
 \arguments{
 \item{outputId}{output variable to read the plot/image from.}
 
-\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
+\item{helpfiles}{A character string denoting directory to save empty help files.
+Default \code{'helpfiles'}.}
 
 \item{...}{Optional arguments for \code{plotOutput}.}
 }
 \description{
 Renders plot with helper within an application.
-Same as \code{helper(plotOutput(outputId, ...))}
+Same as \code{helper(plotOutput(outputId, ...))}. Creates help file and/or
+directory if it does not exist.
 }
 \details{
 This function uses \code{\link[shinyhelper]{helper}}.
+}
+\seealso{
+For more elements with helpers see \code{\link[shinydetails]{numericInput_h}},
+\code{\link[shinydetails]{tableOutput_h}},
+ \code{\link[shinydetails]{sliderInput_h}}
 }

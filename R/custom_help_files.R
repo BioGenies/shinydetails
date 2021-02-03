@@ -1,14 +1,17 @@
 
-#' @title Custom help files
-#' @description  This function creates help files with custom content.
+#' @title Creating new help file
+#' @description  This function creates help file (unless it already exists) with
+#' custom content.
 #' @inheritParams shinyhelper::create_help_files
 #' @param content A character string to display in the automatically created help file.
-#' @details This function is based on \code{\link[shinyhelper]{create_help_files}}.
+#' @details This function is based on \code{\link[shinyhelper]{create_help_files}} a lot.
+#' The option for providing custom \code{content} is the only improvement.
+#'
 #'
 
-
-
-create_help_files_custom <- function (files, help_dir = "helpfiles", content = "This helpfile is not finished yet.")
+create_help_files_custom <- function (files,
+                                      help_dir = "helpfiles",
+                                      content = "This helpfile is not finished yet.")
 {
   if (!interactive()) {
     message("Must be called from an interactive session")

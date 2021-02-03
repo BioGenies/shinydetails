@@ -4,12 +4,14 @@
 \alias{dt_format}
 \title{Table widget}
 \usage{
-dt_format(dat, cols = colnames(dat))
+dt_format(dat, colnames = colnames(dat))
 }
 \arguments{
-\item{dat}{Dataset. A matrix or data frame.}
+\item{dat}{a data object - a matrix or a data frame.}
 
-\item{cols}{Names of columns to display.}
+\item{colnames}{Names of columns to display in the table. By default it is
+equal to the names of the columns from the \code{dat}. Parameter \code{colnames} is
+correspond the argument \code{colnames} from \code{\link[DT]{datatable}}.}
 }
 \description{
 \code{dt_format} is a function for creating a graphical

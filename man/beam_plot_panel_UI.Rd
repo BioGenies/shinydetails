@@ -20,7 +20,8 @@ beam_plot_panel_UI(
 \item{tab_table}{Character. Title of tab containing table. Default to
 \code{paste(id, "data")}.}
 
-\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
+\item{helpfiles}{A character string denoting directory to save empty help files.
+Default \code{'helpfiles'}.}
 }
 \description{
 Creates module ui for tabset panel. It contains two tabs - with

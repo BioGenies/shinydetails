@@ -29,7 +29,8 @@ or \code{'geom_col'}. Default \code{'geom_point'}.}
 \item{tt_range}{A number denoting maximum distance between hoover and objects on the plot.
 The row, whose distance to the hoover is less than \code{tt_range} will be selected from the whole data. Default 5.}
 
-\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
+\item{helpfiles}{A character string denoting directory to save empty help files.
+Default \code{'helpfiles'}.}
 }
 \description{
 Creates module server for tabset panel with plot and table.

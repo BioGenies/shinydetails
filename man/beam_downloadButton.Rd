@@ -2,24 +2,26 @@
 % Please edit documentation in R/download_button.R
 \name{beam_downloadButton}
 \alias{beam_downloadButton}
-\title{Download button}
+\title{Download button for plot}
 \usage{
 beam_downloadButton(id, plot_out, device)
 }
 \arguments{
-\item{id}{Id name of tabset panel.}
+\item{id}{Unique id of download button.}
 
-\item{plot_out}{lot to save.}
+\item{plot_out}{Plot to save.}
 
-\item{device}{Parameter from \code{\link[ggplot2]{ggsave}}.}
+\item{device}{Device to use. Can either be a device function
+(e.g. \code{\link[=png]{png()}}), or one of "eps", "ps", "tex" (pictex),
+"pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
 }
 \value{
 \code{generate_downloadButton} returns the output of \code{downloadHandler}
 for given plot and device.
 }
 \description{
-Generates download button.
+Generates download button for a plot with dimensions of 300x400mm.
 }
 \details{
-This function uses \code{\link[shiny]{downloadHandler}}.
+This function uses \code{\link[shiny]{downloadHandler}} and \code{\link[ggplot2]{ggsave}}.
 }

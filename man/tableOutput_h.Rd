@@ -9,14 +9,20 @@ tableOutput_h(outputId, helpfiles = "helpfiles", ...)
 \arguments{
 \item{outputId}{output variable to read the table from}
 
-\item{helpfiles}{A character string denoting directory to save empty help files. Default \code{'helpfiles'}.}
+\item{helpfiles}{A character string denoting directory to save empty help files.
+Default \code{'helpfiles'}.}
 
 \item{...}{Optional arguments for \code{plotOutput}.}
 }
 \description{
-Renders table with helper within an application.
+Renders table with helper within an application. Creates help file and/or
+directory if it does not exist.
 Same as \code{helper(dataTableOutput(outputId, ...))}
 }
 \details{
 This function uses \code{\link[shinyhelper]{helper}}.
+}
+\seealso{
+For more elements with helpers see \code{\link[shinydetails]{numericInput_h}},
+\code{\link[shinydetails]{plotOutput_h}}, \code{\link[shinydetails]{sliderInput_h}}
 }
