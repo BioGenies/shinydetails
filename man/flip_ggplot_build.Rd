@@ -22,3 +22,23 @@ the names so that coordinates from the output of  \code{\link[ggplot2]{ggplot_bu
 are compatible with the plot and returns it. In case when coordinates are not flipped
 \code{flip_ggplot_build} returns \code{ggplot_build_data}.
 }
+\examples{
+\dontrun{
+
+# returns plot info without any change because coordinates are not flipped
+p <- ggplot(Orange, aes(x = age, y = circumference, col = Tree)) +
+geom_point() +
+geom_line()
+plot_info <- ggplot_build(p)
+flip_ggplot_build(plot_info) # it is the same as plot_info
+
+# returns plot info with data modified for flipped coordinates
+p <- ggplot(Orange, aes(x = age, y = circumference, col = Tree)) +
+geom_point() +
+geom_line() +
+coord_flip()
+plot_info <- ggplot_build(p)
+flip_ggplot_build(plot_info)
+}
+
+}

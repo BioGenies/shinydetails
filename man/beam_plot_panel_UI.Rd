@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_panel.R
 \name{beam_plot_panel_UI}
 \alias{beam_plot_panel_UI}
-\title{UI for tabset panel.}
+\title{Creating UI for a Shiny module with plot and data}
 \usage{
 beam_plot_panel_UI(
   id,
@@ -12,7 +12,8 @@ beam_plot_panel_UI(
 )
 }
 \arguments{
-\item{id}{Id name of tabset panel.}
+\item{id}{unique ID name of tabset. The same ID as in the corresponding server for
+a module}
 
 \item{tab_plot}{Character. Title of tab containing plot. Default to
 \code{paste(id, "plot")}.}
@@ -24,10 +25,72 @@ beam_plot_panel_UI(
 Default \code{'helpfiles'}.}
 }
 \description{
-Creates module ui for tabset panel. It contains two tabs - with
-plot and an elegant table with respective data.
+Creates module's UI for tabset panel containing two tabs - with
+plot and an elegant table with data.
 }
 \details{
-\code{tabsetPanel_UI} provides three download buttons (png, svg and jpeg)
-and tooltip for plot and helpers for both plot and table.
+Module's UI involves a panel with two tabs. The first tab consists of
+displayed plot and three download buttons (png, svg and jpeg). There is also a
+compatible with the plot tooltip. The second tab consists of a table
+ with two download buttons (Excel and CSV). For both table and plot there are
+ provided helpers. \
+For more information see \code{\link[shinydetails]{plotOutput_h}} and
+\code{\link[shinydetails]{tableOutput_h}}
+}
+\examples{
+\dontrun{
+ui <- fluidPage(title = "Example app",
+             beam_plot_panel_UI("airquality_basic"),
+             beam_plot_panel_UI("airquality_advanced",
+                                tab_plot = "An advanced plot",
+                                tab_table = "An elegant table for an advanced plot",
+                                helpfiles = "custom_helpfiles"))
+
+server <- function(input, output, session) {
+   airquality_basic_plot <- reactive({
+       ggplot(airquality, aes(x = Wind, y = Temp, col = as.character(Month))) +
+       geom_point()
+   })
+   airquality_basic_data <- reactive({
+       airquality
+   })
+   beam_plot_panel_SERVER("airquality_basic",
+                          plot_out = airquality_basic_plot(),
+                          table_out = airquality_basic_data())
+
+   airquality_advanced_data <- reactive({
+       df <- data.frame(aggregate(. ~ Month, airquality, function(x) c(mean = mean(x), sd = sd(x)))[, c(1, 5)])
+       df[["Month"]] <- month.name[df[["Month"]]]
+       data.frame(Month = df[["Month"]],
+       Temp_mean = df$Temp[, 1],
+       Error = df$Temp[, 2],
+       Year = 1973)})
+
+   airquality_advanced_plot <- reactive({
+       ggplot(airquality_advanced_data(), aes(y = 0, yend = Temp_mean, x = Month, xend = Month)) +
+       geom_segment() +
+       geom_point(mapping = aes(x = Month, y = Temp_mean), size = 3) +
+       geom_point() +
+       ylab("average temperature")
+   })
+   beam_plot_panel_SERVER("airquality_advanced",
+                          plot_out = airquality_advanced_plot(),
+                          table_out = airquality_advanced_data(),
+                          plot_type = "geom_segment",
+                          tt_content = list(row_text = c("Date: \%s \%i",
+                                                         "Average temperature: \%f Â°F",
+                                                         "Error: \%f",
+                                                         "Place: La Guardia Airport"),
+                                            chosen_cols = c("Month",
+                                                            "Year",
+                                                            "Temp_mean",
+                                                            "Error"))
+                         )
+
+}
+}
+}
+\seealso{
+To build Shiny module within a Shiny app using \code{beam_plot_panel_UI}
+see \code{\link[shinydetails]{beam_plot_panel_SERVER}}.
 }

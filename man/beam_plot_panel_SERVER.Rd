@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_panel.R
 \name{beam_plot_panel_SERVER}
 \alias{beam_plot_panel_SERVER}
-\title{Server for tabset panel.}
+\title{Creating server for a Shiny module with plot and data.}
 \usage{
 beam_plot_panel_SERVER(
   id,
@@ -15,16 +15,26 @@ beam_plot_panel_SERVER(
 )
 }
 \arguments{
-\item{id}{Id of tabset panel.}
+\item{id}{unique Id of tabset panel. The same ID as in the corresponding UI for
+a module}
 
-\item{plot_out}{Plot to display in tab. The items from first mapping will be connected with tooltip.}
+\item{plot_out}{Plot to display in tab. There will be provided an automatically
+generated tooltip compatible with the plot. The items from first mapping will be
+connected with tooltip.}
 
 \item{table_out}{Table to display in tab.}
 
 \item{plot_type}{Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
-\item{tt_content}{Optional.}
+\item{tt_content}{Optional. If \code{NULL} in the tooltip will be displayed names of
+columns with corresponding values from data. One can customize tooltip content
+adding parameter \code{tt_content} here. It should be a list of \code{chosen_cols}
+and \code{row_text}. To display some values from the data in the content one
+should reference to the relevant column from the \code{chosen_cols} and in
+\code{row_text} write appropriate type of that variable like in the function
+\code{\link[base]{sprintf}} (for example \code{'\%s'} in case when chosen variable
+is a character string).}
 
 \item{tt_range}{A number denoting maximum distance between hoover and objects on the plot.
 The row, whose distance to the hoover is less than \code{tt_range} will be selected from the whole data. Default 5.}
@@ -33,5 +43,72 @@ The row, whose distance to the hoover is less than \code{tt_range} will be selec
 Default \code{'helpfiles'}.}
 }
 \description{
-Creates module server for tabset panel with plot and table.
+Creates module server for tabset panel containing two tabs - with
+plot and an elegant table with data.
+}
+\details{
+Module's server involves a panel with two tabs. The first tab consists of
+displayed plot and three download buttons (png, svg and jpeg). There is also a
+compatible with plot tooltip obtained via \code{\link[shinydetails]{beam_tooltip}}.
+The second tab consists of a table with two download buttons (Excel and CSV).
+The table \code{table_out} before  displaying is formatted using
+\code{\link[shinydetails]{dt_format}}. For both table and plot there are provided
+helpers.
+}
+\examples{
+\dontrun{
+ui <- fluidPage(title = "Example app",
+             beam_plot_panel_UI("airquality_basic"),
+             beam_plot_panel_UI("airquality_advanced",
+                                tab_plot = "An advanced plot",
+                                tab_table = "An elegant table for an advanced plot",
+                                helpfiles = "custom_helpfiles"))
+
+server <- function(input, output, session) {
+   airquality_basic_plot <- reactive({
+       ggplot(airquality, aes(x = Wind, y = Temp, col = as.character(Month))) +
+       geom_point()
+   })
+   airquality_basic_data <- reactive({
+       airquality
+   })
+   beam_plot_panel_SERVER("airquality_basic",
+                          plot_out = airquality_basic_plot(),
+                          table_out = airquality_basic_data())
+
+   airquality_advanced_data <- reactive({
+       df <- data.frame(aggregate(. ~ Month, airquality, function(x) c(mean = mean(x), sd = sd(x)))[, c(1, 5)])
+       df[["Month"]] <- month.name[df[["Month"]]]
+       data.frame(Month = df[["Month"]],
+       Temp_mean = df$Temp[, 1],
+       Error = df$Temp[, 2],
+       Year = 1973)})
+
+   airquality_advanced_plot <- reactive({
+       ggplot(airquality_advanced_data(), aes(y = 0, yend = Temp_mean, x = Month, xend = Month)) +
+       geom_segment() +
+       geom_point(mapping = aes(x = Month, y = Temp_mean), size = 3) +
+       geom_point() +
+       ylab("average temperature")
+   })
+   beam_plot_panel_SERVER("airquality_advanced",
+                          plot_out = airquality_advanced_plot(),
+                          table_out = airquality_advanced_data(),
+                          plot_type = "geom_segment",
+                          tt_content = list(row_text = c("Date: \%s \%i",
+                                                         "Average temperature: \%f Â°F",
+                                                         "Error: \%f",
+                                                         "Place: La Guardia Airport"),
+                                            chosen_cols = c("Month",
+                                                            "Year",
+                                                            "Temp_mean",
+                                                            "Error"))
+                         )
+
+}
+}
+}
+\seealso{
+To build Shiny module within a Shiny app using \code{beam_plot_panel_SERVER}
+see \code{\link[shinydetails]{beam_plot_panel_UI}}.
 }
