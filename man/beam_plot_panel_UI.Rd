@@ -78,7 +78,7 @@ server <- function(input, output, session) {
                           table_out = airquality_advanced_data(),
                           plot_type = "geom_segment",
                           tt_content = list(row_text = c("Date: \%s \%i",
-                                                         "Average temperature: \%f Â°F",
+                                                         "Average temperature: \%f °F",
                                                          "Error: \%f",
                                                          "Place: La Guardia Airport"),
                                             chosen_cols = c("Month",
