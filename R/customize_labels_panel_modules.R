@@ -64,9 +64,12 @@ server <- function(input, output, session) {
     airquality
   })
 
-  beam_plot_panel_SERVER("airquality_panel",
-                         plot_out = airquality_plot(),
-                         table_out = airquality_data())
+  observeEvent(airquality_plot(), {
+    beam_plot_panel_SERVER("airquality_panel",
+                           plot_out = airquality_plot(),
+                           table_out = airquality_data())
+  })
+
 }
 
 shinyApp(ui, server)
