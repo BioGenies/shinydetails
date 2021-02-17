@@ -273,26 +273,26 @@ beam_plot_panel_SERVER <- function(id,
     shinyhelper::observe_helpers(session = shiny::getDefaultReactiveDomain(),
                                  help_dir = helpfiles)
 
-    output[["plot"]] <- renderPlot({plot_out})
+    output[["plot"]] <- renderPlot({plot_out()})
 
     plot_info_data <- reactive({
-      plot_info <- ggplot_build(plot_out)
+      plot_info <- ggplot_build(plot_out())
       flip_ggplot_build(plot_info)[["data"]][[1]]
     })
 
     output[["tooltip"]] <- renderUI({
       hv = input[["hover"]]
       if(!is.null(hv)) {
-        beam_tooltip(hv, plot_info_data(), table_out, plot_type, tt_content, tt_range)
+        beam_tooltip(hv, plot_info_data(), table_out(), plot_type, tt_content, tt_range)
       }
     })
 
-    output[["download_png"]] <- beam_downloadButton(id, plot_out, "png")
-    output[["download_jpeg"]] <- beam_downloadButton(id, plot_out, "jpeg")
-    output[["download_svg"]] <- beam_downloadButton(id, plot_out, "svg")
+    output[["download_png"]] <- beam_downloadButton(id, plot_out(), "png")
+    output[["download_jpeg"]] <- beam_downloadButton(id, plot_out(), "jpeg")
+    output[["download_svg"]] <- beam_downloadButton(id, plot_out(), "svg")
 
     output[["data"]] <- DT::renderDataTable(server = FALSE, {
-      dt_format(table_out)
+      dt_format(table_out())
     })
   })
 }

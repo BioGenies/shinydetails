@@ -1,4 +1,3 @@
-library(shinydetails)
 library(shiny)
 library(ggplot2)
 
