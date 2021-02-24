@@ -19,7 +19,8 @@ extract_tt_data_row(
 
 \item{plot_data}{data on which the ggplot is based}
 
-\item{plot_type}{Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+\item{plot_type}{Type of plot corresponding to the data from first mapping.
+Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_range}{A number denoting maximum distance between hoover and objects on the plot.

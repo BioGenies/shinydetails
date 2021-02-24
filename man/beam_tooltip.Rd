@@ -13,14 +13,25 @@ beam_tooltip(hv, plot_info, plot_data, plot_type, tt_content, tt_range = 5)
 
 \item{plot_data}{data on which the ggplot is based}
 
-\item{plot_type}{Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+\item{plot_type}{Type of plot corresponding to the data from first mapping.
+Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
-\item{tt_content}{Content}
+\item{tt_content}{Optional. If \code{NULL} in the tooltip will be displayed names of
+columns with corresponding values from data. One can customize tooltip content
+adding parameter \code{tt_content} here. It should be a list of \code{chosen_cols}
+and \code{row_text}. To display some values from the data in the content one
+should reference to the relevant column from the \code{chosen_cols} and in
+\code{row_text} write appropriate type of that variable like in the function
+\code{\link[base]{sprintf}} (for example \code{'\%s'} in case when chosen variable
+is a character string).}
 
 \item{tt_range}{A number denoting maximum distance between hoover and objects on the plot.
 The row, whose distance to the hoover is less than \code{tt_range} will be selected from the whole data. Default 5.}
 }
 \description{
-Generates tooltip .
+Generates tooltip for plot.
+}
+\details{
+This function uses \code{\link[shinydetails]{extract_tt_data_row}}.
 }

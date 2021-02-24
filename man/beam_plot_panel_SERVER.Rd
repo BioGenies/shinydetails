@@ -24,7 +24,8 @@ connected with tooltip.}
 
 \item{table_out}{Table to display in tab.}
 
-\item{plot_type}{Type of plot corresponding to the data from first mapping. Accepts either \code{'geom_point'}, \code{'geom_segment'}
+\item{plot_type}{Type of plot corresponding to the data from first mapping.
+Accepts either \code{'geom_point'}, \code{'geom_segment'}
 or \code{'geom_col'}. Default \code{'geom_point'}.}
 
 \item{tt_content}{Optional. If \code{NULL} in the tooltip will be displayed names of

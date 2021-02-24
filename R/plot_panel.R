@@ -185,14 +185,7 @@ beam_plot_panel_UI <- function(id,
 #' @param table_out Table to display in tab.
 #' @inheritParams extract_tt_data_row
 #' @inheritParams plotOutput_h
-#' @param tt_content Optional. If \code{NULL} in the tooltip will be displayed names of
-#' columns with corresponding values from data. One can customize tooltip content
-#' adding parameter \code{tt_content} here. It should be a list of \code{chosen_cols}
-#' and \code{row_text}. To display some values from the data in the content one
-#' should reference to the relevant column from the \code{chosen_cols} and in
-#' \code{row_text} write appropriate type of that variable like in the function
-#' \code{\link[base]{sprintf}} (for example \code{'\%s'} in case when chosen variable
-#' is a character string).
+#' @inheritParams beam_tooltip
 #' @details Module's server involves a panel with two tabs. The first tab consists of
 #' displayed plot and three download buttons (png, svg and jpeg). There is also a
 #' compatible with plot tooltip obtained via \code{\link[shinydetails]{beam_tooltip}}.
