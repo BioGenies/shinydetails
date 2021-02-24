@@ -22,8 +22,8 @@ server <- function(input, output, session) {
   })
 
   beam_plot_panel_SERVER("airquality_basic",
-                         plot_out = airquality_basic_plot(),
-                         table_out = airquality_basic_data())
+                         plot_out = airquality_basic_plot,
+                         table_out = airquality_basic_data)
 
   airquality_advanced_data <- reactive({
 
@@ -45,8 +45,8 @@ server <- function(input, output, session) {
   })
 
   beam_plot_panel_SERVER("airquality_advanced",
-                         plot_out = airquality_advanced_plot(),
-                         table_out = airquality_advanced_data(),
+                         plot_out = airquality_advanced_plot,
+                         table_out = airquality_advanced_data,
                          plot_type = "geom_segment",
                          tt_content = list(row_text = c("Date: %s %i",
                                                         "Average temperature: %f °F",
